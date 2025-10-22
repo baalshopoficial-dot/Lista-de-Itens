@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LISTA COC</title>
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 28px;
+      letter-spacing: 1px;
+      color: #a5b4fc;
+    }
+    table {
+      border-collapse: collapse;
+      width: 70%;
+      max-width: 800px;
+      background-color: #1c1c1c;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+    th {
+      background-color: #2a2a2a;
+    }
+    tr:hover {
+      background-color: #2e2e2e;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #4f46e5;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #6366f1;
+    }
+    a {
+      color: #93c5fd;
+      margin-top: 15px;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>LISTA COC</h1>
+  <table id="lista">
+    <thead>
+      <tr><th>Nome</th><th>Coluna 1</th><th>Coluna 2</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <button onclick="salvarSelecoes()">Salvar Seleções</button>
+  <a href="index.html">⬅ Voltar à Tela Inicial</a>
+
+  <script>
+    const TITULO_LISTA = "LISTA COC";
+    const storageKey = "listaCOC_" + TITULO_LISTA.replaceAll(" ", "_");
+
+    const nomes = [
+      "HodgeNelly", "ValdezDevin", "CrxZzyBR", "Hellow", "Cilla", "Felps",
+      "Sarada", "TannerJosea", "FuraBuxo", "YatesMucel", "PHARAOH", "MalignaRT",
+      "AnuBis", "LuchadorDeLuz", "WileyKayla", "MathisPell", "Espadakon",
+      "Sylvannas", "Numb", "Solus", "Chele", "apollyon", "lady", "caramelo", "glenmore"
+    ];
+
+    let selecoes = JSON.parse(localStorage.getItem(storageKey)) || {};
+    const tbody = document.querySelector("#lista tbody");
+
+    nomes.forEach(nome => {
+      const col1 = selecoes[nome]?.col1 || false;
+      const col2 = selecoes[nome]?.col2 || false;
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${nome}</td>
+        <td><input type="checkbox" data-nome="${nome}" data-coluna="1" ${col1 ? "checked" : ""}></td>
+        <td><input type="checkbox" data-nome="${nome}" data-coluna="2" ${col2 ? "checked" : ""}></td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    function salvarSelecoes() {
+      const checkboxes = document.querySelectorAll("input[type='checkbox']");
+      selecoes = {};
+      checkboxes.forEach(cb => {
+        const nome = cb.dataset.nome;
+        const coluna = cb.dataset.coluna;
+        if (!selecoes[nome]) selecoes[nome] = { col1: false, col2: false };
+        if (cb.checked) selecoes[nome][`col${coluna}`] = true;
+      });
+      localStorage.setItem(storageKey, JSON.stringify(selecoes));
+      alert(TITULO_LISTA + " salva com sucesso! ✅");
+    }
+  </script>
+</body>
+</html>
