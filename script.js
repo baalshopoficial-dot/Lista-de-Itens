@@ -91,27 +91,58 @@ async function salvarLista(nomeLista){
   alert('💾 Lista salva com sucesso!');
 }
 
-async function verificarLimpeza(nomeLista){
-  const tbody=document.getElementById('listaCocBody');
-  const linhas=[...tbody.querySelectorAll('tr')];
-  let colunasCheias=[true,true,true];
+async function verificarLimpeza(nomeLista) {
+  const tbody = document.getElementById("listaCocBody");
+  const linhas = [...tbody.querySelectorAll("tr")];
+  let colunasCheias = [true, true, true];
 
-  linhas.forEach(row=>{
-    const checks=[...row.querySelectorAll('input')];
-    if(checks.every(c=>c.checked)) row.remove();
+  // ⚙️ Removei a parte que excluía as linhas:
+  // linhas.forEach(row => {
+  //   const checks = [...row.querySelectorAll("input")];
+  //   if (checks.every(c => c.checked)) row.remove();
+  // });
+
+  // Verifica se cada coluna está 100% preenchida
+  linhas.forEach(row => {
+    const checks = [...row.querySelectorAll("input")];
+    checks.forEach((c, i) => { if (!c.checked) colunasCheias[i] = false; });
   });
 
-  const linhas2=[...tbody.querySelectorAll('tr')];
-  linhas2.forEach(row=>{
-    const checks=[...row.querySelectorAll('input')];
-    checks.forEach((c,i)=>{ if(!c.checked) colunasCheias[i]=false; });
+  // Se todas as linhas de uma coluna estiverem marcadas, limpa só aquela coluna
+  colunasCheias.forEach((full, i) => {
+    if (full) {
+      linhas.forEach(row => {
+        const chk = row.cells[i + 1]?.querySelector("input");
+        if (chk) chk.checked = false;
+      });
+    }
   });
 
-  colunasCheias.forEach((full,i)=>{
-    if(full){
-      linhas2.forEach(row=>{
-        const chk=row.cells[i+1]?.querySelector('input');
-        if(chk) chk.checked=false;
+  await salvarLista(nomeLista);
+}
+async function verificarLimpeza(nomeLista) {
+  const tbody = document.getElementById("listaCocBody");
+  const linhas = [...tbody.querySelectorAll("tr")];
+  let colunasCheias = [true, true, true];
+
+  // ⚙️ Removei a parte que excluía as linhas:
+  // linhas.forEach(row => {
+  //   const checks = [...row.querySelectorAll("input")];
+  //   if (checks.every(c => c.checked)) row.remove();
+  // });
+
+  // Verifica se cada coluna está 100% preenchida
+  linhas.forEach(row => {
+    const checks = [...row.querySelectorAll("input")];
+    checks.forEach((c, i) => { if (!c.checked) colunasCheias[i] = false; });
+  });
+
+  // Se todas as linhas de uma coluna estiverem marcadas, limpa só aquela coluna
+  colunasCheias.forEach((full, i) => {
+    if (full) {
+      linhas.forEach(row => {
+        const chk = row.cells[i + 1]?.querySelector("input");
+        if (chk) chk.checked = false;
       });
     }
   });
