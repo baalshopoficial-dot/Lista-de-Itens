@@ -191,3 +191,62 @@ async function obterTodosNomesBase() {
   await ref.set({ nomes: dados });
   return dados.map(x => x.nome);
 }
+// ============== [CONSULTA] Render helpers ==============
+function montarHeaderConsulta(thead, colCount) {
+  thead.innerHTML = '<tr>' +
+    '<th>Nome</th>' +
+    Array.from({length: colCount}, (_, i) => `<th>${i+1}</th>`).join('') +
+  '</tr>';
+}
+
+function montarCorpoConsulta(tbody, dados, colCount) {
+  tbody.innerHTML = '';
+  dados.forEach(item => {
+    const cols = (Array.isArray(item.cols) ? item.cols.slice() : legacyToCols(item));
+    while (cols.length < colCount) cols.push(false);
+
+    const tr = document.createElement('tr');
+
+    const tdNome = document.createElement('td');
+    tdNome.className = 'nome';
+    tdNome.textContent = item.nome;
+    tr.appendChild(tdNome);
+
+    cols.forEach(v => {
+      const td = document.createElement('td');
+      td.textContent = v ? '✅' : '⛔';
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+}
+
+// ============== [CONSULTA] Realtime listener por lista ==============
+function escutarListaConsulta(nomeLista, theadId, tbodyId) {
+  const thead = document.getElementById(theadId);
+  const tbody = document.getElementById(tbodyId);
+  if (!thead || !tbody) return;
+
+  const ref = db.collection('listas_epoch').doc(nomeLista);
+
+  // Assinatura em tempo real
+  ref.onSnapshot(async (snap) => {
+    let dados = [];
+    if (snap.exists && Array.isArray(snap.data().nomes) && snap.data().nomes.length > 0) {
+      dados = snap.data().nomes;
+    } else {
+      // se não existir, cria com nomes padrão e sai (novo snapshot virá em seguida)
+      dados = NOMES_INICIAIS.map(n => ({ nome: n, cols: [false, false, false], data: new Date().toISOString() }));
+      await ref.set({ nomes: dados });
+      return;
+    }
+
+    const colCount = Math.max(3, ...dados.map(x => (Array.isArray(x.cols) ? x.cols.length : legacyToCols(x).length)));
+    montarHeaderConsulta(thead, colCount);
+    montarCorpoConsulta(tbody, dados, colCount);
+  }, (err) => {
+    console.error(`[consulta] erro ao assinar ${nomeLista}:`, err);
+  });
+}
+
