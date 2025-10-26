@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Excluir Nome — Dark Epoch</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body class="fundo-escuro">
+  <div class="container-form">
+    <h1 class="titulo">➖ Excluir Nome</h1>
+    <p class="subtitulo">Remove o nome de TODAS as listas</p>
+    <select id="selectNomes"></select>
+    <div class="form-acoes" style="margin-top:10px;">
+      <button onclick="acaoExcluir()">Excluir</button>
+      <button class="botao-voltar" onclick="window.location.href='menu.html'">⬅️ Voltar</button>
+    </div>
+    <p id="msg"></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if(localStorage.getItem('isAdmin')!=='true'){ window.location.href='index.html'; return; }
+      await ensureFirebase();
+      const nomes = await obterTodosNomesBase();
+      const sel = document.getElementById('selectNomes');
+      sel.innerHTML = '';
+      nomes.forEach(n => { const o=document.createElement('option'); o.value=o.textContent=n; sel.appendChild(o); });
+    });
+    async function acaoExcluir(){
+      const sel=document.getElementById('selectNomes');
+      const nome = sel.value;
+      if(!nome){ document.getElementById('msg').textContent='⚠️ Selecione um nome.'; return; }
+      await excluirNomeGlobal(nome);
+      document.getElementById('msg').textContent=`✅ "${nome}" removido de todas as listas.`;
+      const nomes = await obterTodosNomesBase();
+      sel.innerHTML='';
+      nomes.forEach(n => { const o=document.createElement('option'); o.value=o.textContent=n; sel.appendChild(o); });
+    }
+  </script>
+</body>
+</html>
