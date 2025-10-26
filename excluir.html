@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+<meta charset="UTF-8"><title>Excluir Nome — Dark Epoch</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script defer src="script.js"></script>
+</head><body class="fundo-escuro"><div class="container-form">
+<h1 class="titulo">➖ Excluir Nome</h1>
+<p class="subtitulo">Selecione em quais listas deseja excluir o nome</p>
+<div class="chk-grid">
+  <label><input type="checkbox" id="chk_coc" checked> COC</label>
+  <label><input type="checkbox" id="chk_alma" checked> ALMA</label>
+  <label><input type="checkbox" id="chk_bau" checked> BAU</label>
+  <label><input type="checkbox" id="chk_chama"> CHAMA</label>
+  <label><input type="checkbox" id="chk_pena" checked> PENA</label>
+</div>
+<select id="selectNomes"></select>
+<div class="form-acoes" style="margin-top:10px;">
+  <button onclick="acaoExcluirSelecionadas()">Excluir selecionadas</button>
+  <button class="botao-voltar" onclick="window.location.href='menu.html'">⬅️ Voltar</button>
+</div><p id="msg"></p></div>
+<script>
+document.addEventListener('DOMContentLoaded',async()=>{if(localStorage.getItem('isAdmin')!=='true'){window.location.href='index.html';return;}
+await ensureFirebase();const nomes=await obterTodosNomesBase();const sel=document.getElementById('selectNomes');sel.innerHTML='';nomes.forEach(n=>{const o=document.createElement('option');o.value=o.textContent=n;sel.appendChild(o);});});
+async function acaoExcluirSelecionadas(){
+  const nome=document.getElementById('selectNomes').value;
+  if(!nome){document.getElementById('msg').textContent='⚠️ Selecione um nome.';return;}
+  const listas=[]; if(document.getElementById('chk_coc').checked) listas.push('coc');
+  if(document.getElementById('chk_alma').checked) listas.push('alma');
+  if(document.getElementById('chk_bau').checked) listas.push('bau');
+  if(document.getElementById('chk_chama').checked) listas.push('chama');
+  if(document.getElementById('chk_pena').checked) listas.push('pena');
+  if(listas.length===0){document.getElementById('msg').textContent='⚠️ Selecione ao menos uma lista.';return;}
+  await excluirNomeEmListas(nome, listas);
+  document.getElementById('msg').textContent=`✅ "${nome}" removido de: ${listas.join(', ').toUpperCase()}`;
+  const nomes=await obterTodosNomesBase();const sel=document.getElementById('selectNomes');sel.innerHTML='';nomes.forEach(n=>{const o=document.createElement('option');o.value=o.textContent=n;sel.appendChild(o);});
+}
+</script></body></html>
