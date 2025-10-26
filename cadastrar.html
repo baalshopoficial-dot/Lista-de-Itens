@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastrar Nome — Dark Epoch</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body class="fundo-escuro">
+  <div class="container-form">
+    <h1 class="titulo">➕ Cadastrar Nome</h1>
+    <p class="subtitulo">Adiciona o nome ao final de TODAS as listas</p>
+    <input id="novoNome" placeholder="Digite o nome">
+    <div class="form-acoes" style="margin-top:10px;">
+      <button onclick="acaoCadastrar()">Cadastrar</button>
+      <button class="botao-voltar" onclick="window.location.href='menu.html'">⬅️ Voltar</button>
+    </div>
+    <p id="msg"></p>
+  </div>
+  <script>
+    async function acaoCadastrar(){
+      if(localStorage.getItem('isAdmin')!=='true'){ window.location.href='index.html'; return; }
+      await ensureFirebase();
+      const nome=(document.getElementById('novoNome').value||'').trim();
+      if(!nome){ document.getElementById('msg').textContent='⚠️ Informe um nome.'; return; }
+      await cadastrarNomeGlobal(nome);
+      document.getElementById('msg').textContent=`✅ "${nome}" adicionado a todas as listas.`;
+      document.getElementById('novoNome').value='';
+    }
+  </script>
+</body>
+</html>

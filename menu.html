@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dark Epoch — Menu</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="fundo-escuro">
+  <div class="container-menu">
+    <h1 class="titulo">⚔️ DARK EPOCH ⚔️</h1>
+    <h2 class="subtitulo">Painel de Listas</h2>
+    <div class="menu-botoes">
+      <button onclick="window.location.href='lista_coc.html'">📜 LISTA COC</button>
+      <button onclick="window.location.href='lista_alma.html'">💀 LISTA ALMA</button>
+      <button onclick="window.location.href='lista_bau.html'">🏰 LISTA BAU</button>
+      <button onclick="window.location.href='lista_chama.html'">🔥 LISTA CHAMA</button>
+      <button onclick="window.location.href='lista_pena.html'">🕊️ LISTA PENA</button>
+    </div>
+    <div class="menu-botoes" style="margin-top:18px;">
+      <button onclick="window.location.href='cadastrar.html'">➕ Cadastrar Nome</button>
+      <button onclick="window.location.href='excluir.html'">➖ Excluir Nome</button>
+    </div>
+    <button class="botao-voltar" onclick="sair()">Sair do Admin</button>
+  </div>
+  <script>
+    function sair(){ localStorage.removeItem('isAdmin'); window.location.href='index.html'; }
+    if(localStorage.getItem('isAdmin')!=='true'){ window.location.href='index.html'; }
+  </script>
+</body>
+</html>
