@@ -48,9 +48,9 @@ async function loginAdmin(){
 
 // ====== Dados ======
 const NOMES_INICIAIS=[
-  "HodgeNelly","ValdezDevin","CrxZzyBR","Hellow","Cilla","Felps",
-  "Sarada","TannerJosea","FuraBuxo","YatesMucel","PHARAOH","MalignaRT",
-  "AnuBis","LuchadorDeLuz","WileyKayla","MathisPell","Espadakon",
+  "HodgeNelly","ValdezDevin","CrxZzyBR","Hellow","Cilla",
+  "Sarada","TannerJosea","FuraBuxo","YatesMucel","PHARAOH",
+  "AnuBis","WileyKayla","MathisPell","Espadakon",
   "Sylvannas","Numb","Solus","Chele","apollyon","lady","caramelo","glenmore"
 ];
 
@@ -175,16 +175,26 @@ async function cadastrarNomeGlobal(novoNome){
   }
 }
 
-async function excluirNomeGlobal(nome){
+async function excluirNomeGlobal(nome) {
   await ensureFirebase();
-  const listas=['coc','alma','bau','chama','pena'];
-  for(const nomeLista of listas){
-    const ref=db.collection('listas_epoch').doc(nomeLista);
-    const snap=await ref.get();
-    if(snap.exists){
-      const dados=(snap.data().nomes||[]).filter(x=>x.nome.toLowerCase()!==nome.toLowerCase());
-      await ref.set({nomes:dados});
+  const listas = ['coc', 'alma', 'bau', 'chama', 'pena'];
+
+  // Executa todas as remoções em paralelo e espera todas finalizarem
+  const promises = listas.map(async (nomeLista) => {
+    const ref = db.collection('listas_epoch').doc(nomeLista);
+    const snap = await ref.get();
+    if (snap.exists) {
+      const dados = (snap.data().nomes || [])
+        .filter(x => x.nome.toLowerCase() !== nome.toLowerCase());
+      await ref.set({ nomes: dados });
+      console.log(`🗑️ ${nome} removido de ${nomeLista}`);
     }
+  });
+
+  // Aguarda todas as remoções antes de continuar
+  await Promise.all(promises);
+  console.log(`✅ ${nome} removido de todas as listas`);
+}
   }
 }
 
