@@ -1,5 +1,5 @@
 // ====== Auth (senha: devilsbr) ======
-const ADMIN_HASH = "43ff7c9877b03130544a7db8506a019571a1b34d4b5879d85c1583f8bf94dfaa";
+const ADMIN_HASH = "b6b0bcb448a20eb26a61f88110deefc409d9e53a4a22973969cba16e78692bfa";
 
 // ====== Firebase config ======
 const firebaseConfig = {
