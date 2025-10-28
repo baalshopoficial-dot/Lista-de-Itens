@@ -10,11 +10,10 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-  <!-- Seu script principal -->
+  <!-- Script principal -->
   <script defer src="script.js"></script>
 
   <style>
-    /* Estilos específicos do painel de consulta */
     .consulta-wrap {
       width: 95%;
       max-width: 1600px;
@@ -26,7 +25,9 @@
     }
 
     .consulta-header {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 10px;
     }
 
@@ -78,11 +79,14 @@
 
     .badge {
       display: inline-flex; align-items: center; gap: 6px;
-      padding: 3px 8px; border-radius: 999px; background: #222; border: 1px solid #333; color: #ddd;
+      padding: 3px 8px; border-radius: 999px;
+      background: #222; border: 1px solid #333; color: #ddd;
       font-size: .8rem;
     }
     .legenda {
-      display: flex; gap: 10px; align-items: center; margin-bottom: 10px; opacity: .9;
+      display: flex; gap: 10px; align-items: center;
+      margin-bottom: 10px; opacity: .9;
+      justify-content: center;
     }
   </style>
 </head>
@@ -90,15 +94,12 @@
   <div class="consulta-wrap">
     <div class="consulta-header">
       <h1 class="titulo" style="margin-bottom:0">⚔️ DARK EPOCH — Consulta</h1>
-      <div>
-        <button class="botao-voltar" onclick="window.location.href='menu.html'">⬅️ Voltar</button>
-      </div>
     </div>
 
     <div class="legenda">
       <span class="badge">✅ marcado</span>
       <span class="badge">⛔ não marcado</span>
-      <span class="badge">↻ atualiza em tempo real</span>
+      <span class="badge">↻ atualização em tempo real</span>
     </div>
 
     <div class="consulta-grid">
@@ -130,10 +131,9 @@
   </div>
 
   <script>
-    // Inicializa a tela de consulta sem exigir login
+    // Inicializa leitura pública
     document.addEventListener('DOMContentLoaded', async () => {
       await ensureFirebase();
-      // Assina as 5 listas em tempo real
       escutarListaConsulta('coc', 'head_coc', 'body_coc');
       escutarListaConsulta('alma', 'head_alma', 'body_alma');
       escutarListaConsulta('bau', 'head_bau', 'body_bau');
