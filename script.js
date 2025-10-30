@@ -1,5 +1,8 @@
-// ====== Auth (senha: D3v1L2Br) ======
+// ====== Auth ======
+// Senha comum: D3v1L2Br
 const ADMIN_HASH = "29d6b22b61cb1d96b72a6d34cd51f5292b1f4a66ea00944f72702dc067ad4817";
+// Senha master: cp1115bupnf (hash SHA-256)
+const ADMIN_MASTER_HASH = "500a3ec61db2d71d839cb84e3ebdc5932a3753fc657011ecf7a58cd4251c836a";
 
 // ====== Firebase config ======
 const firebaseConfig = {
@@ -17,16 +20,16 @@ let db = null;
 // ====== Funções utilitárias ======
 async function sha256(message) {
   const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
 function glowOk() {
-  const card = document.getElementById('loginCard');
+  const card = document.getElementById("loginCard");
   if (card) {
-    card.classList.add('glow-ok');
-    setTimeout(() => card.classList.remove('glow-ok'), 1200);
+    card.classList.add("glow-ok");
+    setTimeout(() => card.classList.remove("glow-ok"), 1200);
   }
 }
 
@@ -38,15 +41,28 @@ async function ensureFirebase() {
 
 // ====== Login ======
 async function loginAdmin() {
-  const input = document.getElementById("adminPassword").value || '';
+  const input = document.getElementById("adminPassword").value || "";
   const hash = await sha256(input);
   const status = document.getElementById("loginStatus");
 
+  await ensureFirebase();
+
+  // Acesso Master
+  if (hash === ADMIN_MASTER_HASH) {
+    localStorage.setItem("isAdmin", "true");
+    localStorage.setItem("isMaster", "true");
+    status.textContent = "✅ Acesso MASTER concedido!";
+    glowOk();
+    setTimeout(() => { window.location.href = "menu.html"; }, 900);
+    return;
+  }
+
+  // Acesso comum
   if (hash === ADMIN_HASH) {
     localStorage.setItem("isAdmin", "true");
+    localStorage.removeItem("isMaster");
     status.textContent = "✅ Acesso permitido!";
     glowOk();
-    await ensureFirebase();
     setTimeout(() => { window.location.href = "menu.html"; }, 900);
   } else {
     status.textContent = "❌ Senha incorreta!";
@@ -63,7 +79,7 @@ const NOMES_INICIAIS = [
 
 function legacyToCols(item) {
   if (Array.isArray(item.cols)) return item.cols;
-  const arr = []; for (let i=1;i<=3;i++) arr.push(!!item['col'+i]);
+  const arr = []; for (let i=1;i<=3;i++) arr.push(!!item["col"+i]);
   return arr;
 }
 function ensureColsLength(cols, len) {
@@ -73,11 +89,11 @@ function ensureColsLength(cols, len) {
 // ====== Render / Load ======
 async function carregarLista(nomeLista) {
   await ensureFirebase();
-  const tbody = document.getElementById('listaCocBody');
-  const theadRow = document.getElementById('theadRow');
+  const tbody = document.getElementById("listaCocBody");
+  const theadRow = document.getElementById("theadRow");
   if (!tbody || !theadRow) return;
 
-  const ref = db.collection('listas_epoch').doc(nomeLista);
+  const ref = db.collection("listas_epoch").doc(nomeLista);
   const snap = await ref.get();
   let dados = [];
   if (snap.exists && Array.isArray(snap.data().nomes) && snap.data().nomes.length > 0) {
@@ -88,17 +104,17 @@ async function carregarLista(nomeLista) {
   }
 
   let colCount = Math.max(3, ...dados.map(x => legacyToCols(x).length));
-  theadRow.innerHTML = '<th>Nome</th>' + Array.from({ length: colCount }, (_,i)=>`<th>${i+1}</th>`).join('');
-  tbody.innerHTML='';
+  theadRow.innerHTML = "<th>Nome</th>" + Array.from({ length: colCount }, (_,i)=>`<th>${i+1}</th>`).join("");
+  tbody.innerHTML="";
 
   dados.forEach(item => {
     const cols = ensureColsLength(legacyToCols(item), colCount);
-    const tr = document.createElement('tr');
-    const tdNome = document.createElement('td'); tdNome.textContent = item.nome; tr.appendChild(tdNome);
+    const tr = document.createElement("tr");
+    const tdNome = document.createElement("td"); tdNome.textContent = item.nome; tr.appendChild(tdNome);
     cols.forEach((value,i) => {
-      const td = document.createElement('td');
-      const chk = document.createElement('input'); chk.type='checkbox'; chk.checked = !!value;
-      chk.addEventListener('change', () => verificarLimpeza(nomeLista));
+      const td = document.createElement("td");
+      const chk = document.createElement("input"); chk.type="checkbox"; chk.checked = !!value;
+      chk.addEventListener("change", () => verificarLimpeza(nomeLista));
       td.appendChild(chk); tr.appendChild(td);
     });
     tbody.appendChild(tr);
@@ -108,38 +124,38 @@ async function carregarLista(nomeLista) {
 // ====== Save ======
 async function salvarLista(nomeLista) {
   await ensureFirebase();
-  const tbody = document.getElementById('listaCocBody');
-  const theadRow = document.getElementById('theadRow');
+  const tbody = document.getElementById("listaCocBody");
+  const theadRow = document.getElementById("theadRow");
   const colCount = theadRow.cells.length - 1;
-  const linhas = [...tbody.querySelectorAll('tr')];
+  const linhas = [...tbody.querySelectorAll("tr")];
   const dados = linhas.map(row => {
     const nome = row.cells[0].textContent;
-    const cols = []; for (let i=1;i<=colCount;i++) cols.push(row.cells[i].querySelector('input').checked);
+    const cols = []; for (let i=1;i<=colCount;i++) cols.push(row.cells[i].querySelector("input").checked);
     return { nome, cols, data: new Date().toISOString() };
   });
-  await db.collection('listas_epoch').doc(nomeLista).set({ nomes: dados });
-  console.log('💾 Lista salva:', nomeLista, dados.length, 'itens, cols=', colCount);
+  await db.collection("listas_epoch").doc(nomeLista).set({ nomes: dados });
+  console.log("💾 Lista salva:", nomeLista, dados.length, "itens, cols=", colCount);
 }
 
 // ====== Limpeza e expansão dinâmica ======
 async function verificarLimpeza(nomeLista) {
-  const tbody = document.getElementById('listaCocBody');
-  const theadRow = document.getElementById('theadRow');
+  const tbody = document.getElementById("listaCocBody");
+  const theadRow = document.getElementById("theadRow");
   const colCount = theadRow.cells.length - 1;
-  const linhas = [...tbody.querySelectorAll('tr')];
+  const linhas = [...tbody.querySelectorAll("tr")];
   if (linhas.length === 0) return;
 
   let colunasCheias = Array(colCount).fill(true);
   linhas.forEach(row => {
-    for (let i=1;i<=colCount;i++) if (!row.cells[i].querySelector('input').checked) colunasCheias[i-1] = false;
+    for (let i=1;i<=colCount;i++) if (!row.cells[i].querySelector("input").checked) colunasCheias[i-1] = false;
   });
 
-  for (let i=0;i<colCount-1;i++) if (colunasCheias[i]) linhas.forEach(row => { row.cells[i+1].querySelector('input').checked = false; });
+  for (let i=0;i<colCount-1;i++) if (colunasCheias[i]) linhas.forEach(row => { row.cells[i+1].querySelector("input").checked = false; });
 
   if (colunasCheias[colCount-1]) {
-    const th = document.createElement('th'); th.textContent = String(colCount+1); theadRow.appendChild(th);
-    linhas.forEach(row => { const td=document.createElement('td'); const chk=document.createElement('input'); chk.type='checkbox'; chk.addEventListener('change',()=>verificarLimpeza(nomeLista)); td.appendChild(chk); row.appendChild(td); });
-    console.log('🆕 Nova coluna criada:', colCount+1);
+    const th = document.createElement("th"); th.textContent = String(colCount+1); theadRow.appendChild(th);
+    linhas.forEach(row => { const td=document.createElement("td"); const chk=document.createElement("input"); chk.type="checkbox"; chk.addEventListener("change",()=>verificarLimpeza(nomeLista)); td.appendChild(chk); row.appendChild(td); });
+    console.log("🆕 Nova coluna criada:", colCount+1);
   }
 
   await salvarLista(nomeLista);
@@ -148,9 +164,9 @@ async function verificarLimpeza(nomeLista) {
 // ====== Cadastro ======
 async function cadastrarNomeGlobal(novoNome) {
   await ensureFirebase();
-  const listas=['coc','alma','bau','chama','pena'];
+  const listas=["coc","alma","bau","chama","pena"];
   for (const nomeLista of listas) {
-    const ref = db.collection('listas_epoch').doc(nomeLista);
+    const ref = db.collection("listas_epoch").doc(nomeLista);
     const snap = await ref.get();
     let dados = snap.exists ? (snap.data().nomes || []) : [];
     const colCount = Math.max(3, ...dados.map(x => (Array.isArray(x.cols) ? x.cols.length : 3)));
@@ -163,89 +179,66 @@ async function cadastrarNomeGlobal(novoNome) {
   }
 }
 
-// ====== Exclusão (seletiva por lista) ======
+// ====== Exclusão ======
 async function excluirNomeEmListas(nome, listas) {
   await ensureFirebase();
   const tasks = listas.map(async (nomeLista) => {
-    const ref = db.collection('listas_epoch').doc(nomeLista);
+    const ref = db.collection("listas_epoch").doc(nomeLista);
     const snap = await ref.get();
     if (snap.exists) {
       const dados = (snap.data().nomes || []).filter(x => x.nome.toLowerCase() !== nome.toLowerCase());
       await ref.set({ nomes: dados });
       console.log(`🗑️ ${nome} removido de ${nomeLista}`);
-    } else {
-      console.log(`ℹ️ Lista ${nomeLista} não existe ainda.`);
     }
   });
   await Promise.all(tasks);
-  console.log(`✅ ${nome} removido de: ${listas.join(', ')}`);
+  console.log(`✅ ${nome} removido de: ${listas.join(", ")}`);
 }
 
-// Compatibilidade: exclusão global (todas as listas)
 async function excluirNomeGlobal(nome) {
-  return excluirNomeEmListas(nome, ['coc','alma','bau','chama','pena']);
+  return excluirNomeEmListas(nome, ["coc","alma","bau","chama","pena"]);
 }
 
-async function obterTodosNomesBase() {
-  await ensureFirebase();
-  const ref = db.collection('listas_epoch').doc('coc');
-  const snap = await ref.get();
-  if (snap.exists) return (snap.data().nomes || []).map(x => x.nome);
-  const dados = NOMES_INICIAIS.map(n => ({ nome:n, cols:[false,false,false], data:new Date().toISOString() }));
-  await ref.set({ nomes: dados });
-  return dados.map(x => x.nome);
-}
-// ============== [CONSULTA] Render helpers ==============
+// ====== Consulta (renderização e realtime) ======
 function montarHeaderConsulta(thead, colCount) {
-  thead.innerHTML = '<tr>' +
-    '<th>Nome</th>' +
-    Array.from({length: colCount}, (_, i) => `<th>${i+1}</th>`).join('') +
-  '</tr>';
+  thead.innerHTML = "<tr><th>Nome</th>" +
+    Array.from({length: colCount}, (_, i) => `<th>${i+1}</th>`).join("") +
+  "</tr>";
 }
 
 function montarCorpoConsulta(tbody, dados, colCount) {
-  tbody.innerHTML = '';
+  tbody.innerHTML = "";
   dados.forEach(item => {
     const cols = (Array.isArray(item.cols) ? item.cols.slice() : legacyToCols(item));
     while (cols.length < colCount) cols.push(false);
-
-    const tr = document.createElement('tr');
-
-    const tdNome = document.createElement('td');
-    tdNome.className = 'nome';
+    const tr = document.createElement("tr");
+    const tdNome = document.createElement("td");
+    tdNome.className = "nome";
     tdNome.textContent = item.nome;
     tr.appendChild(tdNome);
-
     cols.forEach(v => {
-      const td = document.createElement('td');
-      td.textContent = v ? '✅' : '⛔';
+      const td = document.createElement("td");
+      td.textContent = v ? "✅" : "⛔";
       tr.appendChild(td);
     });
-
     tbody.appendChild(tr);
   });
 }
 
-// ============== [CONSULTA] Realtime listener por lista ==============
 function escutarListaConsulta(nomeLista, theadId, tbodyId) {
   const thead = document.getElementById(theadId);
   const tbody = document.getElementById(tbodyId);
   if (!thead || !tbody) return;
-
-  const ref = db.collection('listas_epoch').doc(nomeLista);
-
-  // Assinatura em tempo real
+  const ref = db.collection("listas_epoch").doc(nomeLista);
   ref.onSnapshot(async (snap) => {
     let dados = [];
     if (snap.exists && Array.isArray(snap.data().nomes) && snap.data().nomes.length > 0) {
       dados = snap.data().nomes;
     } else {
-      // se não existir, cria com nomes padrão e sai (novo snapshot virá em seguida)
       dados = NOMES_INICIAIS.map(n => ({ nome: n, cols: [false, false, false], data: new Date().toISOString() }));
       await ref.set({ nomes: dados });
       return;
     }
-
     const colCount = Math.max(3, ...dados.map(x => (Array.isArray(x.cols) ? x.cols.length : legacyToCols(x).length)));
     montarHeaderConsulta(thead, colCount);
     montarCorpoConsulta(tbody, dados, colCount);
@@ -253,4 +246,3 @@ function escutarListaConsulta(nomeLista, theadId, tbodyId) {
     console.error(`[consulta] erro ao assinar ${nomeLista}:`, err);
   });
 }
-
