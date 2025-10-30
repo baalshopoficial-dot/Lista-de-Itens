@@ -1,5 +1,5 @@
-// ====== Auth (senha: devilsbr) ======
-const ADMIN_HASH = "b6b0bcb448a20eb26a61f88110deefc409d9e53a4a22973969cba16e78692bfa";
+// ====== Auth (senha: D3v1L2Br) ======
+const ADMIN_HASH = "29d6b22b61cb1d96b72a6d34cd51f5292b1f4a66ea00944f72702dc067ad4817";
 
 // ====== Firebase config ======
 const firebaseConfig = {
@@ -14,17 +14,20 @@ const firebaseConfig = {
 
 let db = null;
 
-// ====== Util ======
-function glowOk() {
-  const card = document.getElementById('loginCard');
-  if (card) { card.classList.add('glow-ok'); setTimeout(() => card.classList.remove('glow-ok'), 1400); }
-}
-
+// ====== Funções utilitárias ======
 async function sha256(message) {
   const msgBuffer = new TextEncoder().encode(message);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2,'0')).join('');
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function glowOk() {
+  const card = document.getElementById('loginCard');
+  if (card) {
+    card.classList.add('glow-ok');
+    setTimeout(() => card.classList.remove('glow-ok'), 1200);
+  }
 }
 
 async function ensureFirebase() {
@@ -35,17 +38,18 @@ async function ensureFirebase() {
 
 // ====== Login ======
 async function loginAdmin() {
-  const input = document.getElementById('adminPassword').value || '';
+  const input = document.getElementById("adminPassword").value || '';
   const hash = await sha256(input);
-  const status = document.getElementById('loginStatus');
+  const status = document.getElementById("loginStatus");
+
   if (hash === ADMIN_HASH) {
-    localStorage.setItem('isAdmin', 'true');
-    status.textContent = '✅ Acesso permitido!';
+    localStorage.setItem("isAdmin", "true");
+    status.textContent = "✅ Acesso permitido!";
     glowOk();
     await ensureFirebase();
-    setTimeout(() => window.location.href = 'menu.html', 800);
+    setTimeout(() => { window.location.href = "menu.html"; }, 900);
   } else {
-    status.textContent = '❌ Senha incorreta!';
+    status.textContent = "❌ Senha incorreta!";
   }
 }
 
