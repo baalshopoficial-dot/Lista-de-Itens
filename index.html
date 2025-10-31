@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Dark Epoch — Login</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script defer src="script.js?v=2025-10-31"></script>
+</head>
+<body class="fundo-escuro">
+<div class="container-menu" id="loginCard">
+  <h1 class="titulo">⚔️ DARK EPOCH ⚔️</h1>
+  <h2 class="subtitulo">Acesso Restrito</h2>
+  <input type="password" id="adminPassword" placeholder="Senha de administrador">
+  <div class="menu-botoes">
+    <button onclick="loginAdmin()">Entrar</button>
+  </div>
+  <p id="loginStatus"></p>
+</div>
+</body>
+</html>
