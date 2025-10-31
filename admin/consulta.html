@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Consulta Geral</title>
+<link rel="stylesheet" href="../style.css">
+<script defer src="../script.js?v=2025-10-31"></script>
+</head>
+<body onload="requireAdminOrRedirect(); ensureFirebase(); ['coc','alma','bau','chama','pena'].forEach(l => escutarListaConsulta(l, 'thead_'+l, 'tbody_'+l))">
+  <h1 class="titulo">Consulta Geral</h1>
+  <div class="listas-consulta">
+    <div class="lista-bloco">
+      <h3>COC</h3>
+      <table><thead id="thead_coc"></thead><tbody id="tbody_coc"></tbody></table>
+    </div>
+    <div class="lista-bloco">
+      <h3>ALMA</h3>
+      <table><thead id="thead_alma"></thead><tbody id="tbody_alma"></tbody></table>
+    </div>
+    <div class="lista-bloco">
+      <h3>BAU</h3>
+      <table><thead id="thead_bau"></thead><tbody id="tbody_bau"></tbody></table>
+    </div>
+    <div class="lista-bloco">
+      <h3>CHAMA</h3>
+      <table><thead id="thead_chama"></thead><tbody id="tbody_chama"></tbody></table>
+    </div>
+    <div class="lista-bloco">
+      <h3>PENA</h3>
+      <table><thead id="thead_pena"></thead><tbody id="tbody_pena"></tbody></table>
+    </div>
+  </div>
+</body>
+</html>
