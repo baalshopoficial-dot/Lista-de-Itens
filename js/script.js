@@ -1,6 +1,6 @@
 // ====== Hash das senhas ======
 const ADMIN_HASH = "29d6b22b61cb1d96b72a6d34cd51f5292b1f4a66ea00944f72702dc067ad4817"; // D3v1L2Br
-const MASTER_HASH = "7b02f0d8cb2345f1340e5d80f1efb42ac699f22b58c6ef7e528fcb1b64e5a4ab"; // cp1115bupnf
+const MASTER_HASH = "500a3ec61db2d71d839cb84e3ebdc5932a3753fc657011ecf7a58cd4251c836a"; // cp1115bupnf
 
 
 // ====== Firebase config ======
