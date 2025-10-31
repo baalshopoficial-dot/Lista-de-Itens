@@ -1,7 +1,4 @@
-// ====== Auth ======
-// Senha comum: D3v1L2Br
 const ADMIN_HASH = "29d6b22b61cb1d96b72a6d34cd51f5292b1f4a66ea00944f72702dc067ad4817";
-// Senha master: cp1115bupnf (hash SHA-256)
 const ADMIN_MASTER_HASH = "500a3ec61db2d71d839cb84e3ebdc5932a3753fc657011ecf7a58cd4251c836a";
 
 // ====== Firebase config ======
