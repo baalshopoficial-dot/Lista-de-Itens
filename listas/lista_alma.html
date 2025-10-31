@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>LISTA ALMA</title>
+<link rel="stylesheet" href="../style.css">
+<script defer src="../script.js?v=2025-10-31"></script>
+</head>
+<body onload="requireAdminOrRedirect(); carregarLista('alma')">
+<div class="container-lista">
+  <h1 class="titulo">LISTA ALMA</h1>
+  <div class="menu-botoes">
+    <button onclick="salvarLista('alma')">Salvar</button>
+    <button onclick="window.location='../menu.html'">Voltar</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr id="theadRow">
+        <th>Nome</th>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+      </tr>
+    </thead>
+    <tbody id="listaCocBody"></tbody>
+  </table>
+</div>
+</body>
+</html>
