@@ -5,26 +5,92 @@
   <title>Dark Epoch — Menu</title>
   <link rel="stylesheet" href="assets/css/style.css">
   <script defer src="js/script.js?v=2025-10-31"></script>
+  <style>
+    .menu-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      width: 100%;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+      justify-items: center;
+      width: 90%;
+      max-width: 420px;
+    }
+
+    .menu-grid button {
+      width: 130px;
+      height: 45px;
+      font-weight: bold;
+      background-color: #00ffcc;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #000;
+      box-shadow: 0 0 8px #00ffcc55;
+    }
+
+    .menu-grid button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px #00ffccaa;
+    }
+
+    hr {
+      width: 80%;
+      border: none;
+      border-top: 1px solid #00ffcc44;
+      margin: 25px 0;
+    }
+
+    .menu-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 90%;
+      max-width: 420px;
+    }
+  </style>
 </head>
+
 <body class="fundo-escuro">
   <div class="container-menu">
     <h1 class="titulo">🦇 Dark Epoch</h1>
     <h2 class="subtitulo">Painel Principal</h2>
 
-    <div class="menu-botoes">
-      <button onclick="window.location.href='listas/lista_coc.html'">Lista COC</button>
-      <button onclick="window.location.href='listas/lista_alma.html'">Lista ALMA</button>
-      <button onclick="window.location.href='listas/lista_bau.html'">Lista BAU</button>
-      <button onclick="window.location.href='listas/lista_chama.html'">Lista CHAMA</button>
-      <button onclick="window.location.href='listas/lista_pena.html'">Lista PENA</button>
-    </div>
+    <div class="menu-wrapper">
 
-    <hr style="margin: 25px 0; border-color: #00ffcc33;">
+      <!-- LISTAS -->
+      <div class="menu-grid">
+        <button onclick="window.location.href='listas/lista_coc.html'">Lista COC</button>
+        <button onclick="window.location.href='listas/lista_alma.html'">Lista ALMA</button>
+        <button onclick="window.location.href='listas/lista_bau.html'">Lista BAU</button>
+        <button onclick="window.location.href='listas/lista_chama.html'">Lista CHAMA</button>
+        <button style="grid-column: span 2;" onclick="window.location.href='listas/lista_pena.html'">Lista PENA</button>
+      </div>
 
-    <div class="menu-botoes">
-      <button id="linkSenhas" onclick="window.location.href='admin/senhas.html'">Gerenciar Senhas</button>
-      <button id="linkBackups" onclick="window.location.href='admin/backups.html'">Backups</button>
-      <button onclick="window.location.href='admin/logs.html'">Logs</button>
+      <!-- AÇÕES DE NOMES -->
+      <div class="menu-grid">
+        <button onclick="window.location.href='admin/adicionar.html'">➕ Adicionar Nome</button>
+        <button onclick="window.location.href='admin/remover.html'">🗑️ Remover Nome</button>
+      </div>
+
+      <hr>
+
+      <!-- ÁREA ADMIN -->
+      <div class="menu-footer">
+        <div class="menu-grid">
+          <button id="btnSenhas" onclick="window.location.href='admin/senhas.html'">Gerenciar Senhas</button>
+          <button id="btnBackups" onclick="window.location.href='admin/backups.html'">Backups</button>
+          <button onclick="window.location.href='admin/logs.html'">Logs</button>
+        </div>
+      </div>
     </div>
 
     <footer class="rodape">
@@ -36,8 +102,8 @@
     document.addEventListener("DOMContentLoaded", () => {
       const isMaster = localStorage.getItem('isMaster') === 'true';
       if (!isMaster) {
-        document.getElementById('linkSenhas').style.display = 'none';
-        document.getElementById('linkBackups').style.display = 'none';
+        document.getElementById('btnSenhas').style.display = 'none';
+        document.getElementById('btnBackups').style.display = 'none';
       }
     });
   </script>
