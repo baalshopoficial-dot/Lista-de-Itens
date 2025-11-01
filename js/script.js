@@ -44,34 +44,57 @@ function glowOk() {
     setTimeout(() => card.classList.remove('glow-ok'), 1200);
   }
 }
-
-// ====== 🔑 LOGIN ======
+// ====== LOGIN ATUALIZADO ======
 async function loginAdmin() {
-  const input = document.getElementById("adminPassword").value || '';
+  const input = document.getElementById("adminPassword").value.trim();
   const hash = await sha256(input);
   const status = document.getElementById("loginStatus");
+
+  // Inicializa Firebase
   await ensureFirebase();
 
-  if (hash === ADMIN_MASTER_HASH) {
+  // 1️⃣ Verifica a senha master (fixa)
+  const MASTER_HASH = "f4b8f0e1e6d3d8fcb5f7a7cbe9c63c59c0f50a6a4d02c2eea0d69a2233da2f61"; // hash da cp1115bupnf
+  if (hash === MASTER_HASH) {
     localStorage.setItem("isAdmin", "true");
     localStorage.setItem("isMaster", "true");
-    status.textContent = "✅ Acesso MASTER concedido!";
-    console.log("%c🦇 DarkEpoch | Modo MASTER Ativado", "color: #00ffcc; font-weight: bold; font-size: 16px;");
-    glowOk();
-    setTimeout(() => { window.location.href = "menu.html"; }, 900);
-  } else if (hash === ADMIN_HASH) {
+    status.textContent = "🦇 Acesso MASTER autorizado!";
+    setTimeout(() => window.location.href = "menu.html", 800);
+    return;
+  }
+
+  // 2️⃣ Verifica a senha padrão (admin)
+  if (hash === ADMIN_HASH) {
     localStorage.setItem("isAdmin", "true");
-    localStorage.removeItem("isMaster");
     status.textContent = "✅ Acesso permitido!";
-    console.log("%c⚔️ DarkEpoch | Acesso Admin comum liberado", "color: #ffff66; font-weight: bold; font-size: 14px;");
-    glowOk();
-    setTimeout(() => { window.location.href = "menu.html"; }, 900);
-  } else {
-    status.textContent = "❌ Senha incorreta!";
-    localStorage.removeItem("isAdmin");
-    localStorage.removeItem("isMaster");
+    setTimeout(() => window.location.href = "menu.html", 800);
+    return;
+  }
+
+  // 3️⃣ Verifica senhas adicionais no Firestore
+  try {
+    const ref = db.collection("senhas_epoch");
+    const snapshot = await ref.get();
+    let acessoLiberado = false;
+    snapshot.forEach(doc => {
+      const dados = doc.data();
+      if (dados.hash === hash) {
+        acessoLiberado = true;
+        localStorage.setItem("isAdmin", "true");
+        status.textContent = `✅ Acesso liberado para ${dados.nome || "usuário"}`;
+        setTimeout(() => window.location.href = "menu.html", 800);
+      }
+    });
+
+    if (!acessoLiberado) {
+      status.textContent = "❌ Senha incorreta ou não cadastrada.";
+    }
+  } catch (err) {
+    console.error("Erro ao verificar senhas no Firestore:", err);
+    status.textContent = "⚠️ Erro ao verificar senha no servidor.";
   }
 }
+
 
 // ====== 🚫 PROTEÇÃO DE PÁGINAS ======
 function requireAdminOrRedirect() {
@@ -269,4 +292,5 @@ async function executarBackupAutomatizado() {
 }
 
 setInterval(executarBackupAutomatizado, 300000); // a cada 5 minutos
+
 
