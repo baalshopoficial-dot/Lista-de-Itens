@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista COC — Dark Epoch</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script defer src="../js/script.js?v=2025-10-31"></script>
+</head>
+<body class="fundo-escuro" onload="carregarLista('coc')">
+  <div class="container-menu">
+    <h1 class="titulo">LISTA COC</h1>
+
+    <table border="1" style="width:100%; text-align:center; color:white; border-color:#00ffcc;">
+      <thead><tr id="theadRow"></tr></thead>
+      <tbody id="listaCocBody"></tbody>
+    </table>
+
+    <div class="menu-botoes" style="margin-top:15px;">
+      <button onclick="salvarLista('coc')">💾 Salvar</button>
+      <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
+    </div>
+  </div>
+</body>
+</html>
