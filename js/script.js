@@ -185,15 +185,33 @@ async function verificarLimpeza(nomeLista) {
   if (linhas.length === 0) return;
 
   let colunasCheias = Array(colCount).fill(true);
+
+  // Verifica cada célula da tabela
   linhas.forEach(row => {
-    for (let i = 1; i <= colCount; i++)
-      if (!row.cells[i].querySelector('input').checked) colunasCheias[i - 1] = false;
+    for (let i = 1; i <= colCount; i++) {
+      const chk = row.cells[i].querySelector('input');
+      if (!chk.checked) colunasCheias[i - 1] = false;
+    }
   });
 
+  // 🔹 Limpa automaticamente as colunas que estiverem 100% marcadas
+  colunasCheias.forEach((preenchida, i) => {
+    if (preenchida) {
+      linhas.forEach(row => {
+        const chk = row.cells[i + 1].querySelector('input');
+        chk.checked = false;
+      });
+      console.log(`🧹 Coluna ${i + 1} limpa automaticamente (todas estavam marcadas).`);
+    }
+  });
+
+  // 🔹 Se a última coluna for totalmente preenchida → cria nova coluna
   if (colunasCheias[colCount - 1]) {
+    const novaCol = colCount + 1;
     const th = document.createElement('th');
-    th.textContent = String(colCount + 1);
+    th.textContent = novaCol;
     theadRow.appendChild(th);
+
     linhas.forEach(row => {
       const td = document.createElement('td');
       const chk = document.createElement('input');
@@ -202,9 +220,11 @@ async function verificarLimpeza(nomeLista) {
       td.appendChild(chk);
       row.appendChild(td);
     });
-    console.log('🆕 Nova coluna criada:', colCount + 1);
+
+    console.log(`🆕 Nova coluna criada (${novaCol}) após preencher completamente a anterior.`);
   }
 
+  // 🔹 Salva o estado atualizado no Firestore
   await salvarLista(nomeLista);
 }
 
@@ -249,3 +269,4 @@ async function executarBackupAutomatizado() {
 }
 
 setInterval(executarBackupAutomatizado, 300000); // a cada 5 minutos
+
