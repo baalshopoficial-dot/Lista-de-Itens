@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dark Epoch — Remover Nome</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script defer src="../js/script.js?v=2025-10-31"></script>
+</head>
+<body class="fundo-escuro" onload="requireAdminOrRedirect()">
+  <div class="container-menu">
+    <h1 class="titulo">Remover Nome</h1>
+
+    <input type="text" id="nomeRemover" placeholder="Digite o nome para remover">
+
+    <div style="margin:10px 0;">
+      <label><input type="checkbox" class="listaChk" value="coc" checked> COC</label><br>
+      <label><input type="checkbox" class="listaChk" value="alma" checked> ALMA</label><br>
+      <label><input type="checkbox" class="listaChk" value="bau" checked> BAU</label><br>
+      <label><input type="checkbox" class="listaChk" value="chama" checked> CHAMA</label><br>
+      <label><input type="checkbox" class="listaChk" value="pena" checked> PENA</label><br>
+    </div>
+
+    <div class="menu-botoes">
+      <button onclick="removerNome()">🗑️ Remover</button>
+      <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
+    </div>
+
+    <p id="statusRemover"></p>
+  </div>
+
+  <script>
+    async function removerNome() {
+      const nome = document.getElementById('nomeRemover').value.trim();
+      if (!nome) return alert('Digite o nome que deseja remover.');
+      const listas = [...document.querySelectorAll('.listaChk:checked')].map(c => c.value);
+      if (listas.length === 0) return alert('Selecione pelo menos uma lista.');
+
+      await ensureFirebase();
+      for (const lista of listas) {
+        const ref = db.collection('listas_epoch').doc(lista);
+        const snap = await ref.get();
+        if (!snap.exists) continue;
+
+        const dados = (snap.data().nomes || []).filter(x => x.nome.toLowerCase() !== nome.toLowerCase());
+        await ref.set({ nomes: dados });
+      }
+
+      await registrarLog("Admin", `Removido nome ${nome} de [${listas.join(', ')}]`);
+      document.getElementById('statusRemover').textContent = `✅ Nome "${nome}" removido das listas: ${listas.join(', ')}`;
+      document.getElementById('nomeRemover').value = "";
+    }
+  </script>
+</body>
+</html>

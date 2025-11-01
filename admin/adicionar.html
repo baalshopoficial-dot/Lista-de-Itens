@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dark Epoch — Adicionar Nome</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script defer src="../js/script.js?v=2025-10-31"></script>
+</head>
+<body class="fundo-escuro" onload="requireAdminOrRedirect()">
+  <div class="container-menu">
+    <h1 class="titulo">Adicionar Nome</h1>
+    <input type="text" id="novoNome" placeholder="Digite o nome do jogador">
+    <div class="menu-botoes">
+      <button onclick="adicionarNome()">➕ Adicionar</button>
+      <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
+    </div>
+    <p id="status"></p>
+  </div>
+
+  <script>
+    async function adicionarNome() {
+      const nome = document.getElementById('novoNome').value.trim();
+      if (!nome) return alert('Digite um nome!');
+      await ensureFirebase();
+
+      const listas = ['coc', 'alma', 'bau', 'chama', 'pena'];
+      for (const lista of listas) {
+        const ref = db.collection('listas_epoch').doc(lista);
+        const snap = await ref.get();
+        let dados = snap.exists ? snap.data().nomes : [];
+
+        const existe = dados.some(x => x.nome.toLowerCase() === nome.toLowerCase());
+        if (!existe) {
+          const colCount = Math.max(3, ...dados.map(x => (x.cols ? x.cols.length : 3)));
+          const novo = { nome, cols: Array(colCount).fill(false), data: new Date().toISOString() };
+          dados.push(novo);
+          await ref.set({ nomes: dados });
+        }
+      }
+
+      await registrarLog("Admin", `Adicionado nome ${nome} em todas as listas`);
+      document.getElementById('status').textContent = `✅ Nome "${nome}" adicionado com sucesso!`;
+      document.getElementById('novoNome').value = "";
+    }
+  </script>
+</body>
+</html>
