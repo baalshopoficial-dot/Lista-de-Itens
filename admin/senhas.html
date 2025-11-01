@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dark Epoch — Senhas</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script defer src="../js/script.js?v=2025-10-31"></script>
+</head>
+<body class="fundo-escuro" onload="requireMasterOrRedirect(); carregarSenhas();">
+  <div class="container-menu">
+    <h1 class="titulo">Gerenciamento de Senhas</h1>
+
+    <input type="text" id="novaSenha" placeholder="Nova senha de acesso">
+    <button onclick="adicionarSenha()">Adicionar</button>
+
+    <h3>Senhas Ativas</h3>
+    <ul id="listaSenhas" style="list-style:none; padding:0;"></ul>
+
+    <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
+  </div>
+
+  <script>
+    async function carregarSenhas() {
+      const db = await ensureFirebase();
+      const ref = db.collection('admin_senhas');
+      const snap = await ref.get();
+      const lista = document.getElementById('listaSenhas');
+      lista.innerHTML = '';
+
+      snap.forEach(doc => {
+        const { senhaHash, criadoEm } = doc.data();
+        if (senhaHash === "500a3ec61db2d71d839cb84e3ebdc5932a3753fc657011ecf7a58cd4251c836a") return; // master invisível
+        const li = document.createElement('li');
+        li.textContent = `🔑 ${senhaHash.slice(0, 10)}... (${new Date(criadoEm).toLocaleString()})`;
+        const btn = document.createElement('button');
+        btn.textContent = 'Excluir';
+        btn.onclick = async () => {
+          await ref.doc(doc.id).delete();
+          carregarSenhas();
+        };
+        li.appendChild(btn);
+        lista.appendChild(li);
+      });
+    }
+
+    async function adicionarSenha() {
+      const senha = document.getElementById('novaSenha').value;
+      if (!senha.trim()) return alert('Informe uma senha!');
+      const hash = await sha256(senha);
+      const db = await ensureFirebase();
+      const ref = db.collection('admin_senhas');
+      await ref.add({ senhaHash: hash, criadoEm: new Date().toISOString() });
+      alert('Nova senha cadastrada!');
+      carregarSenhas();
+    }
+  </script>
+</body>
+</html>

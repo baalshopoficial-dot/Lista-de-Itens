@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dark Epoch — Backups</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script defer src="../js/script.js?v=2025-10-31"></script>
+</head>
+<body class="fundo-escuro" onload="requireMasterOrRedirect(); carregarBackups();">
+  <div class="container-menu">
+    <h1 class="titulo">Backups das Listas</h1>
+    <button onclick="fazerBackup()">💾 Fazer Backup Manual</button>
+    <h3>Histórico de Backups</h3>
+    <ul id="listaBackups" style="list-style:none; padding:0;"></ul>
+    <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
+  </div>
+
+  <script>
+    async function carregarBackups() {
+      const db = await ensureFirebase();
+      const ref = db.collection('backups_listas').orderBy('data', 'desc');
+      const snap = await ref.get();
+      const lista = document.getElementById('listaBackups');
+      lista.innerHTML = '';
+      snap.forEach(doc => {
+        const { data, totalNomes } = doc.data();
+        const li = document.createElement('li');
+        li.textContent = `📦 ${new Date(data).toLocaleString()} — ${totalNomes} nomes`;
+        lista.appendChild(li);
+      });
+    }
+
+    async function fazerBackup() {
+      const db = await ensureFirebase();
+      const colecoes = ['coc', 'alma', 'bau', 'chama', 'pena'];
+      let total = 0;
+      const backup = {};
+
+      for (const nome of colecoes) {
+        const doc = await db.collection('listas_epoch').doc(nome).get();
+        backup[nome] = doc.exists ? doc.data().nomes : [];
+        total += backup[nome].length;
+      }
+
+      await db.collection('backups_listas').add({
+        data: new Date().toISOString(),
+        totalNomes: total,
+        conteudo: backup
+      });
+
+      alert('Backup salvo com sucesso!');
+      carregarBackups();
+    }
+  </script>
+</body>
+</html>
