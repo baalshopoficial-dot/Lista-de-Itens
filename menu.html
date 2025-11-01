@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dark Epoch — Menu</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script defer src="js/script.js?v=2025-10-31"></script>
+</head>
+<body class="fundo-escuro">
+  <div class="container-menu">
+    <h1 class="titulo">🦇 Dark Epoch</h1>
+    <h2 class="subtitulo">Painel Principal</h2>
+
+    <div class="menu-botoes">
+      <button onclick="window.location.href='listas/lista_coc.html'">Lista COC</button>
+      <button onclick="window.location.href='listas/lista_alma.html'">Lista ALMA</button>
+      <button onclick="window.location.href='listas/lista_bau.html'">Lista BAU</button>
+      <button onclick="window.location.href='listas/lista_chama.html'">Lista CHAMA</button>
+      <button onclick="window.location.href='listas/lista_pena.html'">Lista PENA</button>
+    </div>
+
+    <hr style="margin: 25px 0; border-color: #00ffcc33;">
+
+    <div class="menu-botoes">
+      <button id="linkSenhas" onclick="window.location.href='admin/senhas.html'">Gerenciar Senhas</button>
+      <button id="linkBackups" onclick="window.location.href='admin/backups.html'">Backups</button>
+      <button onclick="window.location.href='admin/logs.html'">Logs</button>
+    </div>
+
+    <footer class="rodape">
+      <small>DarkEpoch Firebase Secure Edition — v2025.10.31</small>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const isMaster = localStorage.getItem('isMaster') === 'true';
+      if (!isMaster) {
+        document.getElementById('linkSenhas').style.display = 'none';
+        document.getElementById('linkBackups').style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
