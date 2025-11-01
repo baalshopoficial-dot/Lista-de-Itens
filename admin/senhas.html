@@ -2,59 +2,78 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Dark Epoch — Senhas</title>
+  <title>Dark Epoch — Gerenciar Senhas</title>
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <script defer src="../js/script.js?v=2025-10-31"></script>
+  <script defer src="../js/script.js"></script>
 </head>
-<body class="fundo-escuro" onload="requireMasterOrRedirect(); carregarSenhas();">
+<body class="fundo-escuro" onload="requireAdminOrRedirect()">
   <div class="container-menu">
-    <h1 class="titulo">Gerenciamento de Senhas</h1>
+    <h1 class="titulo">Gerenciar Senhas</h1>
+    <input type="text" id="nomeSenha" placeholder="Nome do usuário">
+    <input type="password" id="novaSenha" placeholder="Nova senha">
+    <div class="menu-botoes">
+      <button onclick="criarSenha()">➕ Criar</button>
+      <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
+    </div>
+    <p id="statusSenha"></p>
 
-    <input type="text" id="novaSenha" placeholder="Nova senha de acesso">
-    <button onclick="adicionarSenha()">Adicionar</button>
+    <hr>
 
-    <h3>Senhas Ativas</h3>
-    <ul id="listaSenhas" style="list-style:none; padding:0;"></ul>
-
-    <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
+    <h2 class="subtitulo">Senhas Cadastradas</h2>
+    <table id="tabelaSenhas">
+      <thead><tr><th>Nome</th><th>Hash</th><th>Ações</th></tr></thead>
+      <tbody></tbody>
+    </table>
   </div>
 
   <script>
-    async function carregarSenhas() {
-      const db = await ensureFirebase();
-      const ref = db.collection('admin_senhas');
-      const snap = await ref.get();
-      const lista = document.getElementById('listaSenhas');
-      lista.innerHTML = '';
+    async function criarSenha() {
+      const nome = document.getElementById('nomeSenha').value.trim();
+      const senha = document.getElementById('novaSenha').value.trim();
+      if (!nome || !senha) return alert('Preencha todos os campos.');
 
-      snap.forEach(doc => {
-        const { senhaHash, criadoEm } = doc.data();
-        if (senhaHash === "500a3ec61db2d71d839cb84e3ebdc5932a3753fc657011ecf7a58cd4251c836a") return; // master invisível
-        const li = document.createElement('li');
-        li.textContent = `🔑 ${senhaHash.slice(0, 10)}... (${new Date(criadoEm).toLocaleString()})`;
-        const btn = document.createElement('button');
-        btn.textContent = 'Excluir';
-        btn.onclick = async () => {
-          await ref.doc(doc.id).delete();
-          carregarSenhas();
-        };
-        li.appendChild(btn);
-        lista.appendChild(li);
+      await ensureFirebase();
+      const hash = await sha256(senha);
+
+      const ref = db.collection('senhas_epoch').doc(nome.toLowerCase());
+      await ref.set({ nome, hash, criado_em: new Date().toISOString() });
+
+      document.getElementById('statusSenha').textContent = `✅ Senha criada para ${nome}`;
+      document.getElementById('nomeSenha').value = '';
+      document.getElementById('novaSenha').value = '';
+      carregarSenhas();
+    }
+
+    async function carregarSenhas() {
+      await ensureFirebase();
+      const tbody = document.querySelector('#tabelaSenhas tbody');
+      tbody.innerHTML = '';
+
+      const snapshot = await db.collection('senhas_epoch').get();
+      snapshot.forEach(doc => {
+        const s = doc.data();
+        if (s.hash === "f4b8f0e1e6d3d8fcb5f7a7cbe9c63c59c0f50a6a4d02c2eea0d69a2233da2f61") return; // senha master invisível
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${s.nome}</td>
+          <td>${s.hash.substring(0,16)}...</td>
+          <td><button onclick="excluirSenha('${doc.id}')">🗑️</button></td>
+        `;
+        tbody.appendChild(tr);
       });
     }
 
-    async function adicionarSenha() {
-      const senha = document.getElementById('novaSenha').value;
-      if (!senha.trim()) return alert('Informe uma senha!');
-      const hash = await sha256(senha);
-      const db = await ensureFirebase();
-      const ref = db.collection('admin_senhas');
-      await ref.add({ senhaHash: hash, criadoEm: new Date().toISOString() });
-      alert('Nova senha cadastrada!');
+    async function excluirSenha(id) {
+      if (!confirm('Deseja excluir esta senha?')) return;
+      await ensureFirebase();
+      await db.collection('senhas_epoch').doc(id).delete();
       carregarSenhas();
     }
+
+    document.addEventListener('DOMContentLoaded', carregarSenhas);
   </script>
 </body>
 </html>
