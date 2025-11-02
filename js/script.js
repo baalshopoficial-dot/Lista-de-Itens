@@ -4,7 +4,7 @@
 
 // ================== CONFIGURAÇÃO ==================
 const ADMIN_HASH = "18b68013caff50520c9706a2b96b2370f8fe3cc5be15db5dca5324bf48d52a77"; // D3v1L2Br
-const ADMIN_MASTER_HASH = "f4b8f0e1e6d3d8fcb5f7a7cbe9c63c59c0f50a6a4d02c2eea0d69a2233da2f61"; // cp1115bupnf
+const ADMIN_MASTER_HASH = "500a3ec61db2d71d839cb84e3ebdc5932a3753fc657011ecf7a58cd4251c836a"; // cp1115bupnf
 
 const firebaseConfig = {
   apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
@@ -535,4 +535,5 @@ window.executarBackupAutomatizado = executarBackupAutomatizado;
 window.verificarLimpeza = verificarLimpeza;
 
 logConsole("🦇 script.js carregado — DarkEpoch v2025.10.31", "color:#00ffcc; font-weight:bold;");
+
 
