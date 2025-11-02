@@ -3,23 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <title>Dark Epoch — Login</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- ===== Firebase SDKs ===== -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script defer src="js/script.js?v=2025-10-31"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <!-- ===== Inicialização do Firebase ===== -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
+      authDomain: "mu-epoch.firebaseapp.com",
+      projectId: "mu-epoch",
+      storageBucket: "mu-epoch.firebasestorage.app",
+      messagingSenderId: "995547087811",
+      appId: "1:995547087811:web:9a4581071b931f9364f376",
+      measurementId: "G-NM65WWHE91"
+    };
+
+    // 🔥 Inicializa Firebase apenas uma vez
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+      console.log("✅ Firebase inicializado com sucesso");
+    } else {
+      console.log("⚙️ Firebase já estava inicializado");
+    }
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  </script>
+
+  <!-- ===== Script principal ===== -->
+  <script defer src="script.js?v=2025-11-02"></script>
 </head>
+
 <body class="fundo-escuro">
   <div class="container-menu" id="loginCard">
     <h1 class="titulo">⚔️ DARK EPOCH ⚔️</h1>
     <h2 class="subtitulo">Acesso Restrito</h2>
 
-    <input type="password" id="adminPassword" placeholder="Senha de administrador">
+    <input type="email" id="adminEmail" placeholder="Email (ex: admin@darkepoch.local)">
+    <input type="password" id="adminPassword" placeholder="Senha">
+
     <div class="menu-botoes">
       <button onclick="loginAdmin()">Entrar</button>
     </div>
+
     <p id="loginStatus"></p>
+
+    <hr>
+
+    <button onclick="testeFirebase()">🔍 Testar conexão</button>
   </div>
+
+  <script>
+    // --- Teste de conexão manual ---
+    async function testeFirebase() {
+      try {
+        const snapshot = await db.collection("admin_users").get();
+        alert(`🔥 Firebase conectado! ${snapshot.size} registros encontrados em admin_users.`);
+      } catch (e) {
+        alert("❌ Erro ao conectar: " + e.message);
+      }
+    }
+  </script>
 </body>
 </html>
-
