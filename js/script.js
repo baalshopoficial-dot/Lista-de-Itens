@@ -1,6 +1,6 @@
 // ====== 🔐 AUTH CONFIG ======
-const ADMIN_HASH = "29d6b22b61cb1d96b72a6d34cd51f5292b1f4a66ea00944f72702dc067ad4817"; // D3v1L2Br
-const ADMIN_MASTER_HASH = "500a3ec61db2d71d839cb84e3ebdc5932a3753fc657011ecf7a58cd4251c836a"; // cp1115bupnf
+const ADMIN_HASH = "29d6b22b61cb1d96b72a6d34cd51f5292b1f4a66ea00944f72702dc067ad4817"; // 
+const ADMIN_MASTER_HASH = "500a3ec61db2d71d839cb84e3ebdc5932a3753fc657011ecf7a58cd4251c836a"; // 
 
 // ====== ☁️ FIREBASE CONFIG ======
 const firebaseConfig = {
@@ -292,5 +292,6 @@ async function executarBackupAutomatizado() {
 }
 
 setInterval(executarBackupAutomatizado, 300000); // a cada 5 minutos
+
 
 
