@@ -2,110 +2,153 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Dark Epoch — Menu</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <script defer src="js/script.js?v=2025-10-31"></script>
+  <title>Dark Epoch — Painel Principal</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase (para eventuais chamadas de log) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <script>
+    // Protege a tela para acesso autenticado
+    window.addEventListener("DOMContentLoaded", () => {
+      if (typeof requireAdminOrRedirect === "function") {
+        requireAdminOrRedirect();
+      } else {
+        // fallback: verificação simples
+        if (localStorage.getItem("isAdmin") !== "true") {
+          alert("⚠️ Acesso restrito — faça login novamente.");
+          window.location.href = "index.html";
+        }
+      }
+    });
+  </script>
+  <script defer src="script.js?v=2025-11-02"></script>
+
   <style>
-    .menu-wrapper {
+    body {
+      background: radial-gradient(circle at center, #000000 0%, #050505 60%, #000000 100%);
+      color: #00ffd5;
+      font-family: "Segoe UI", sans-serif;
+      text-align: center;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      gap: 25px;
-      width: 100%;
+      height: 100vh;
     }
 
-    .menu-grid {
+    .card {
+      background: rgba(10, 10, 10, 0.9);
+      border: 1px solid #00ffd5;
+      border-radius: 20px;
+      padding: 40px 60px;
+      box-shadow: 0 0 20px #00ffd580;
+      width: 400px;
+    }
+
+    h1 {
+      font-size: 1.9em;
+      margin-bottom: 10px;
+      color: #00ffd5;
+      text-shadow: 0 0 10px #00ffd5;
+    }
+
+    h2 {
+      font-size: 1.2em;
+      color: #b5b5b5;
+      margin-bottom: 20px;
+    }
+
+    .btn-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 10px;
-      justify-items: center;
-      width: 90%;
-      max-width: 420px;
+      margin-bottom: 25px;
     }
 
-    .menu-grid button {
-      width: 130px;
-      height: 45px;
-      font-weight: bold;
-      background-color: #00ffcc;
+    .btn-grid .btn {
+      background: #00ffd5;
       border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
       color: #000;
-      box-shadow: 0 0 8px #00ffcc55;
+      font-weight: bold;
+      padding: 10px 0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
     }
 
-    .menu-grid button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 12px #00ffccaa;
+    .btn-grid .btn:hover {
+      background: #00a58f;
+      color: #fff;
+      box-shadow: 0 0 10px #00ffd5;
     }
 
-    hr {
-      width: 80%;
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: #00ffd555;
+      margin: 15px 0;
+    }
+
+    .btn-bottom {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .btn-bottom .btn {
+      background: #00ffd5;
       border: none;
-      border-top: 1px solid #00ffcc44;
-      margin: 25px 0;
+      color: #000;
+      font-weight: bold;
+      padding: 10px 0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
     }
 
-    .menu-footer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      width: 90%;
-      max-width: 420px;
+    .btn-bottom .btn:hover {
+      background: #00a58f;
+      color: #fff;
+      box-shadow: 0 0 10px #00ffd5;
+    }
+
+    .footer {
+      margin-top: 25px;
+      font-size: 0.8em;
+      color: #555;
     }
   </style>
 </head>
 
-<body class="fundo-escuro">
-  <div class="container-menu">
-    <h1 class="titulo">🦇 Dark Epoch</h1>
-    <h2 class="subtitulo">Painel Principal</h2>
+<body>
+  <div class="card">
+    <h1>🦇 Dark Epoch</h1>
+    <h2>Painel Principal</h2>
 
-    <div class="menu-wrapper">
-
-      <!-- LISTAS -->
-      <div class="menu-grid">
-        <button onclick="window.location.href='listas/lista_coc.html'">Lista COC</button>
-        <button onclick="window.location.href='listas/lista_alma.html'">Lista ALMA</button>
-        <button onclick="window.location.href='listas/lista_bau.html'">Lista BAU</button>
-        <button onclick="window.location.href='listas/lista_chama.html'">Lista CHAMA</button>
-        <button style="grid-column: span 2;" onclick="window.location.href='listas/lista_pena.html'">Lista PENA</button>
-      </div>
-
-      <!-- AÇÕES DE NOMES -->
-      <div class="menu-grid">
-        <button onclick="window.location.href='admin/adicionar.html'">➕ Adicionar Nome</button>
-        <button onclick="window.location.href='admin/remover.html'">🗑️ Remover Nome</button>
-      </div>
-
-      <hr>
-
-      <!-- ÁREA ADMIN -->
-      <div class="menu-footer">
-        <div class="menu-grid">
-          <button id="btnSenhas" onclick="window.location.href='admin/senhas.html'">Gerenciar Senhas</button>
-          <button id="btnBackups" onclick="window.location.href='admin/backups.html'">Backups</button>
-          <button onclick="window.location.href='admin/logs.html'">Logs</button>
-        </div>
-      </div>
+    <div class="btn-grid">
+      <button class="btn" onclick="window.location.href='lista_coc.html'">Lista COC</button>
+      <button class="btn" onclick="window.location.href='lista_alma.html'">Lista ALMA</button>
+      <button class="btn" onclick="window.location.href='lista_bau.html'">Lista BAU</button>
+      <button class="btn" onclick="window.location.href='lista_chama.html'">Lista CHAMA</button>
     </div>
 
-    <footer class="rodape">
-      <small>DarkEpoch Firebase Secure Edition — v2025.10.31</small>
-    </footer>
-  </div>
+    <button class="btn" style="width: 100%; margin-bottom: 15px;"
+            onclick="window.location.href='lista_pena.html'">Lista PENA</button>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const isMaster = localStorage.getItem('isMaster') === 'true';
-      if (!isMaster) {
-        document.getElementById('btnSenhas').style.display = 'none';
-        document.getElementById('btnBackups').style.display = 'none';
-      }
-    });
-  </script>
+    <div class="divider"></div>
+
+    <div class="btn-bottom">
+      <button class="btn" onclick="window.location.href='gerenciar_senhas.html'">Gerenciar Senhas</button>
+      <button class="btn" onclick="window.location.href='backup.html'">Backups</button>
+    </div>
+
+    <button class="btn" style="margin-top: 10px; width: 100%;"
+            onclick="window.location.href='logs.html'">Logs</button>
+
+    <div class="footer">
+      v2025.11 | DarkEpoch System
+    </div>
+  </div>
 </body>
 </html>
