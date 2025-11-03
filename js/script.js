@@ -3,8 +3,8 @@
 // Arquivo consolidado: login (master/admin/usuários), listas, backups automáticos e logs.
 
 // ================== CONFIGURAÇÃO ==================
-const ADMIN_HASH = "18b68013caff50520c9706a2b96b2370f8fe3cc5be15db5dca5324bf48d52a77"; // D3v1L2Br
-const ADMIN_MASTER_HASH = "500a3ec61db2d71d839cb84e3ebdc5932a3753fc657011ecf7a58cd4251c836a"; // cp1115bupnf
+const ADMIN_HASH = "18b68013caff50520c9706a2b96b2370f8fe3cc5be15db5dca5324bf48d52a77"; // 
+const ADMIN_MASTER_HASH = "500a3ec61db2d71d839cb84e3ebdc5932a3753fc657011ecf7a58cd4251c836a"; //
 
 const firebaseConfig = {
   apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
@@ -547,6 +547,7 @@ window.executarBackupAutomatizado = executarBackupAutomatizado;
 window.verificarLimpeza = verificarLimpeza;
 
 logConsole("🦇 script.js carregado — DarkEpoch v2025.10.31", "color:#00ffcc; font-weight:bold;");
+
 
 
 
