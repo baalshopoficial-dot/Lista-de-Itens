@@ -63,76 +63,88 @@ async function ensureFirebase() {
 }
 
 // ================== LOGIN ==================
+// ================== LOGIN (CORRIGIDO) ==================
 async function loginAdmin() {
-  const input = (document.getElementById("adminPassword")?.value || "").trim();
+  const email = (document.getElementById("adminEmail")?.value || "").trim();
+  const inputSenha = (document.getElementById("adminPassword")?.value || "").trim();
   const statusEl = document.getElementById("loginStatus");
-  if (!statusEl) throw new Error("Elemento #loginStatus não encontrado no HTML.");
+  if (!statusEl) throw new Error("Elemento #loginStatus não encontrado.");
 
-  let hash;
-  try {
-    hash = await sha256(input);
-  } catch (e) {
-    console.error("Erro calculando hash:", e);
-    statusEl.textContent = "⚠️ Erro interno.";
+  if (!inputSenha && !email) {
+    statusEl.textContent = "⚠️ Preencha o email e a senha.";
     return;
   }
 
-  // Inicializa Firebase antes de qualquer acesso à coleção de senhas
+  let hash = "";
+  try {
+    hash = await sha256(inputSenha);
+  } catch (e) {
+    console.error("Erro ao gerar hash:", e);
+    statusEl.textContent = "⚠️ Erro interno ao processar senha.";
+    return;
+  }
+
   try {
     await ensureFirebase();
   } catch (e) {
-    console.error("Erro ao iniciar Firebase:", e);
-    statusEl.textContent = "⚠️ Erro de conexão Firebase.";
+    console.error("Erro inicializando Firebase:", e);
+    statusEl.textContent = "⚠️ Erro ao conectar ao Firebase.";
     return;
   }
 
-  // 1) MASTER (sempre primeiro)
+  // === MASTER ===
   if (hash === ADMIN_MASTER_HASH) {
     localStorage.setItem("isAdmin", "true");
     localStorage.setItem("isMaster", "true");
     statusEl.textContent = "🦇 Acesso MASTER concedido!";
-    logConsole("🦇 DarkEpoch | Modo MASTER Ativado", "color: #00ffcc; font-weight: bold; font-size: 13px;");
     glowOk();
     await registrarLog("MASTER", "Login MASTER efetuado");
     setTimeout(() => window.location.href = "menu.html", 800);
     return;
   }
 
-  // 2) ADMIN padrão
+  // === ADMIN padrão ===
   if (hash === ADMIN_HASH) {
     localStorage.setItem("isAdmin", "true");
     localStorage.removeItem("isMaster");
-    statusEl.textContent = "✅ Acesso de administrador autorizado.";
-    logConsole("⚔️ DarkEpoch | Acesso Admin comum liberado", "color: #ffff66; font-weight: bold;");
+    statusEl.textContent = "✅ Acesso ADMIN concedido!";
     glowOk();
     await registrarLog("ADMIN", "Login ADMIN padrão efetuado");
     setTimeout(() => window.location.href = "menu.html", 800);
     return;
   }
 
-  // 3) Senhas adicionais no Firestore
+  // === Firebase Auth (email/senha comum) ===
   try {
-    const snap = await db.collection(COL_SENHAS).get();
-    let acesso = false;
-    snap.forEach(doc => {
-      const d = doc.data();
-      if (d && d.hash === hash) {
-        acesso = true;
-        localStorage.setItem("isAdmin", "true");
-        localStorage.removeItem("isMaster");
-        localStorage.setItem("senhaUser", d.nome || "Usuário");
-        statusEl.textContent = `✅ Acesso liberado: ${d.nome || "Usuário"}`;
-        glowOk();
-        registrarLog(d.nome || "Usuario", "Login por senha custom");
-        setTimeout(() => window.location.href = "menu.html", 800);
-      }
-    });
-    if (!acesso) {
-      statusEl.textContent = "❌ Senha incorreta ou não cadastrada.";
+    const cred = await firebase.auth().signInWithEmailAndPassword(email, inputSenha);
+    const user = cred.user;
+    if (!user) throw new Error("Usuário não retornado pelo Firebase Auth.");
+
+    // Busca role no Firestore
+    const doc = await db.collection("admin_users").doc(user.email).get();
+    const role = doc.exists ? doc.data().role : "user";
+
+    localStorage.setItem("isAdmin", "true");
+    if (role === "master") {
+      localStorage.setItem("isMaster", "true");
+      statusEl.textContent = "🦇 Acesso MASTER concedido via Firebase!";
+    } else {
+      localStorage.removeItem("isMaster");
+      statusEl.textContent = `✅ Acesso ${role.toUpperCase()} via Firebase!`;
     }
+
+    glowOk();
+    await registrarLog(role.toUpperCase(), `Login via Firebase (${email})`);
+    setTimeout(() => window.location.href = "menu.html", 800);
   } catch (e) {
-    console.error("Erro ao verificar senhas adicionais:", e);
-    statusEl.textContent = "⚠️ Erro ao verificar senhas no servidor.";
+    console.warn("Erro de login Firebase:", e);
+    if (e.code === "auth/user-not-found") {
+      statusEl.textContent = "❌ Usuário não encontrado.";
+    } else if (e.code === "auth/wrong-password") {
+      statusEl.textContent = "❌ Senha incorreta.";
+    } else {
+      statusEl.textContent = "⚠️ Erro ao autenticar: " + e.message;
+    }
   }
 }
 
@@ -535,5 +547,6 @@ window.executarBackupAutomatizado = executarBackupAutomatizado;
 window.verificarLimpeza = verificarLimpeza;
 
 logConsole("🦇 script.js carregado — DarkEpoch v2025.10.31", "color:#00ffcc; font-weight:bold;");
+
 
 
