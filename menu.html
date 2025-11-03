@@ -5,17 +5,35 @@
   <title>Dark Epoch — Painel Principal</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- Firebase (para eventuais chamadas de log) -->
+  <!-- Firebase (para logs e controle de acesso) -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
+  <!-- Inicialização Firebase -->
   <script>
-    // Protege a tela para acesso autenticado
-    window.addEventListener("DOMContentLoaded", () => {
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
+      authDomain: "mu-epoch.firebaseapp.com",
+      projectId: "mu-epoch",
+      storageBucket: "mu-epoch.firebasestorage.app",
+      messagingSenderId: "995547087811",
+      appId: "1:995547087811:web:9a4581071b931f9364f376",
+      measurementId: "G-NM65WWHE91"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+
+  <!-- Carrega o script principal (ajuste de caminho correto) -->
+  <script defer src="js/script.js?v=2025-11-02"></script>
+
+  <script>
+    // Garante que a verificação ocorra somente após o script.js estar disponível
+    window.addEventListener("load", () => {
       if (typeof requireAdminOrRedirect === "function") {
         requireAdminOrRedirect();
       } else {
-        // fallback: verificação simples
+        console.warn("⚠️ Função requireAdminOrRedirect não encontrada, aplicando verificação simples.");
         if (localStorage.getItem("isAdmin") !== "true") {
           alert("⚠️ Acesso restrito — faça login novamente.");
           window.location.href = "index.html";
@@ -23,7 +41,6 @@
       }
     });
   </script>
-  <script defer src="script.js?v=2025-11-02"></script>
 
   <style>
     body {
@@ -66,7 +83,8 @@
       margin-bottom: 25px;
     }
 
-    .btn-grid .btn {
+    .btn-grid .btn,
+    .btn-bottom .btn {
       background: #00ffd5;
       border: none;
       color: #000;
@@ -77,7 +95,8 @@
       transition: 0.3s;
     }
 
-    .btn-grid .btn:hover {
+    .btn-grid .btn:hover,
+    .btn-bottom .btn:hover {
       background: #00a58f;
       color: #fff;
       box-shadow: 0 0 10px #00ffd5;
@@ -94,23 +113,6 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
-    }
-
-    .btn-bottom .btn {
-      background: #00ffd5;
-      border: none;
-      color: #000;
-      font-weight: bold;
-      padding: 10px 0;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .btn-bottom .btn:hover {
-      background: #00a58f;
-      color: #fff;
-      box-shadow: 0 0 10px #00ffd5;
     }
 
     .footer {
