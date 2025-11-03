@@ -5,28 +5,10 @@
   <title>Dark Epoch — Login</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- Firebase SDKs -->
+  <!-- 🔥 Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-  <!-- Inicialização Firebase -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
-      authDomain: "mu-epoch.firebaseapp.com",
-      projectId: "mu-epoch",
-      storageBucket: "mu-epoch.firebasestorage.app",
-      messagingSenderId: "995547087811",
-      appId: "1:995547087811:web:9a4581071b931f9364f376",
-      measurementId: "G-NM65WWHE91"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-  </script>
-
-  <script defer src="js/script.js?v=2025-11-02"></script>
-
 
   <style>
     body {
@@ -95,41 +77,52 @@
     }
   </style>
 </head>
-<script>
-  // 🔹 Garante que o script certo foi carregado
-  console.log("✅ Página index.html carregada — aguardando script.js...");
 
-  // 🔹 Caminho certo do JS (já que está em /js/)
-  const script = document.createElement("script");
-  script.src = "js/script.js?v=2025-11-02";
-  script.defer = true;
-  document.body.appendChild(script);
-
-  // 🔹 Ponte de segurança (caso o script.js ainda não tenha carregado)
-  window.addEventListener("load", () => {
-    if (typeof window.loginAdmin !== "function") {
-      console.warn("⚠️ Função loginAdmin não detectada. Criando ponte...");
-      window.loginAdmin = async function() {
-        alert("Erro: script.js não foi carregado corretamente. Verifique o caminho.");
-        console.error("loginAdmin() não definida — caminho incorreto do script.js?");
-      };
-    } else {
-      console.log("🦇 Função loginAdmin detectada e pronta!");
-    }
-  });
-</script>
 <body>
   <div class="container-menu" id="loginCard">
     <h1>⚔️ DARK EPOCH ⚔️</h1>
     <h2>Acesso Restrito</h2>
 
     <input type="password" id="adminPassword" placeholder="Digite sua senha">
-    <button onclick="loginAdmin()">Entrar</button>
+    <button id="btnLogin">Entrar</button>
 
     <p id="loginStatus"></p>
   </div>
+
+  <!-- 🚀 Firebase inicialização -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
+      authDomain: "mu-epoch.firebaseapp.com",
+      projectId: "mu-epoch",
+      storageBucket: "mu-epoch.firebasestorage.app",
+      messagingSenderId: "995547087811",
+      appId: "1:995547087811:web:9a4581071b931f9364f376",
+      measurementId: "G-NM65WWHE91"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+
+  <!-- 🚀 Script principal -->
+  <script src="script.js?v=2025-11-02"></script>
+
+  <!-- 🎯 Depuração visual -->
+  <script>
+    document.getElementById("btnLogin").addEventListener("click", async () => {
+      try {
+        if (typeof loginAdmin !== "function") {
+          alert("⚠️ loginAdmin() não está definido! Verifique se o script.js foi carregado corretamente.");
+          return;
+        }
+        await loginAdmin();
+      } catch (e) {
+        alert("❌ Erro inesperado no login: " + e.message);
+      }
+    });
+
+    // Mostra no console se o script foi carregado
+    console.log("✅ Index carregado. Teste -> typeof loginAdmin:", typeof loginAdmin);
+  </script>
 </body>
 </html>
-
-
-
