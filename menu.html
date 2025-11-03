@@ -5,42 +5,10 @@
   <title>Dark Epoch — Painel Principal</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- Firebase (para logs e controle de acesso) -->
+  <!-- 🔥 Firebase SDKs (inclui AUTH agora) -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-  <!-- Inicialização Firebase -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
-      authDomain: "mu-epoch.firebaseapp.com",
-      projectId: "mu-epoch",
-      storageBucket: "mu-epoch.firebasestorage.app",
-      messagingSenderId: "995547087811",
-      appId: "1:995547087811:web:9a4581071b931f9364f376",
-      measurementId: "G-NM65WWHE91"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-  </script>
-
-  <!-- Carrega o script principal (ajuste de caminho correto) -->
-  <script defer src="js/script.js?v=2025-11-02"></script>
-
-  <script>
-    // Garante que a verificação ocorra somente após o script.js estar disponível
-    window.addEventListener("load", () => {
-      if (typeof requireAdminOrRedirect === "function") {
-        requireAdminOrRedirect();
-      } else {
-        console.warn("⚠️ Função requireAdminOrRedirect não encontrada, aplicando verificação simples.");
-        if (localStorage.getItem("isAdmin") !== "true") {
-          alert("⚠️ Acesso restrito — faça login novamente.");
-          window.location.href = "index.html";
-        }
-      }
-    });
-  </script>
 
   <style>
     body {
@@ -53,73 +21,15 @@
       align-items: center;
       height: 100vh;
     }
-
-    .card {
-      background: rgba(10, 10, 10, 0.9);
-      border: 1px solid #00ffd5;
-      border-radius: 20px;
-      padding: 40px 60px;
-      box-shadow: 0 0 20px #00ffd580;
-      width: 400px;
-    }
-
-    h1 {
-      font-size: 1.9em;
-      margin-bottom: 10px;
-      color: #00ffd5;
-      text-shadow: 0 0 10px #00ffd5;
-    }
-
-    h2 {
-      font-size: 1.2em;
-      color: #b5b5b5;
-      margin-bottom: 20px;
-    }
-
-    .btn-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 25px;
-    }
-
-    .btn-grid .btn,
-    .btn-bottom .btn {
-      background: #00ffd5;
-      border: none;
-      color: #000;
-      font-weight: bold;
-      padding: 10px 0;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .btn-grid .btn:hover,
-    .btn-bottom .btn:hover {
-      background: #00a58f;
-      color: #fff;
-      box-shadow: 0 0 10px #00ffd5;
-    }
-
-    .divider {
-      width: 100%;
-      height: 1px;
-      background: #00ffd555;
-      margin: 15px 0;
-    }
-
-    .btn-bottom {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-
-    .footer {
-      margin-top: 25px;
-      font-size: 0.8em;
-      color: #555;
-    }
+    .card { background: rgba(10, 10, 10, 0.9); border: 1px solid #00ffd5; border-radius: 20px; padding: 40px 60px; box-shadow: 0 0 20px #00ffd580; width: 400px; }
+    h1 { font-size: 1.9em; margin-bottom: 10px; color: #00ffd5; text-shadow: 0 0 10px #00ffd5; }
+    h2 { font-size: 1.2em; color: #b5b5b5; margin-bottom: 20px; }
+    .btn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px; }
+    .btn-grid .btn, .btn-bottom .btn { background: #00ffd5; border: none; color: #000; font-weight: bold; padding: 10px 0; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+    .btn-grid .btn:hover, .btn-bottom .btn:hover { background: #00a58f; color: #fff; box-shadow: 0 0 10px #00ffd5; }
+    .divider { width: 100%; height: 1px; background: #00ffd555; margin: 15px 0; }
+    .btn-bottom { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .footer { margin-top: 25px; font-size: 0.8em; color: #555; }
   </style>
 </head>
 
@@ -135,8 +45,7 @@
       <button class="btn" onclick="window.location.href='lista_chama.html'">Lista CHAMA</button>
     </div>
 
-    <button class="btn" style="width: 100%; margin-bottom: 15px;"
-            onclick="window.location.href='lista_pena.html'">Lista PENA</button>
+    <button class="btn" style="width: 100%; margin-bottom: 15px;" onclick="window.location.href='lista_pena.html'">Lista PENA</button>
 
     <div class="divider"></div>
 
@@ -145,12 +54,48 @@
       <button class="btn" onclick="window.location.href='backup.html'">Backups</button>
     </div>
 
-    <button class="btn" style="margin-top: 10px; width: 100%;"
-            onclick="window.location.href='logs.html'">Logs</button>
+    <button class="btn" style="margin-top: 10px; width: 100%;" onclick="window.location.href='logs.html'">Logs</button>
 
-    <div class="footer">
-      v2025.11 | DarkEpoch System
-    </div>
+    <div class="footer">v2025.11 | DarkEpoch System</div>
   </div>
+
+  <!-- 🚀 Inicialização Firebase -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
+      authDomain: "mu-epoch.firebaseapp.com",
+      projectId: "mu-epoch",
+      storageBucket: "mu-epoch.firebasestorage.app",
+      messagingSenderId: "995547087811",
+      appId: "1:995547087811:web:9a4581071b931f9364f376",
+      measurementId: "G-NM65WWHE91"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+
+  <!-- 🚀 Script principal (ajuste o caminho se seu JS estiver na raiz) -->
+  <script src="js/script.js?v=2025-11-02"></script>
+  <!-- Se seu script estiver na raiz, use: <script src="script.js?v=2025-11-02"></script> -->
+
+  <!-- 🧩 Verificação de login (só após script carregar) -->
+  <script>
+    window.addEventListener("load", () => {
+      try {
+        if (typeof requireAdminOrRedirect === "function") {
+          requireAdminOrRedirect();
+        } else {
+          const isAdmin = localStorage.getItem("isAdmin") === "true";
+          if (!isAdmin) {
+            alert("⚠️ Acesso restrito — faça login novamente.");
+            window.location.href = "index.html";
+          }
+        }
+      } catch (e) {
+        alert("⚠️ Erro ao verificar login: " + e.message);
+        window.location.href = "index.html";
+      }
+    });
+  </script>
 </body>
 </html>
