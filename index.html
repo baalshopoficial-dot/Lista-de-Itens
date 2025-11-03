@@ -5,12 +5,11 @@
   <title>Dark Epoch — Login</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- ===== Firebase SDKs ===== -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-  <!-- ===== Inicialização do Firebase ===== -->
+  <!-- Inicialização Firebase -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
@@ -21,52 +20,89 @@
       appId: "1:995547087811:web:9a4581071b931f9364f376",
       measurementId: "G-NM65WWHE91"
     };
-
-    // 🔥 Inicializa Firebase apenas uma vez
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-      console.log("✅ Firebase inicializado com sucesso");
-    } else {
-      console.log("⚙️ Firebase já estava inicializado");
-    }
-
-    const auth = firebase.auth();
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
   </script>
 
-  <!-- ===== Script principal ===== -->
   <script defer src="script.js?v=2025-11-02"></script>
+
+  <style>
+    body {
+      background: radial-gradient(circle at center, #000, #030303 70%);
+      color: #00ffd5;
+      font-family: "Segoe UI", sans-serif;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container-menu {
+      background: rgba(10, 10, 10, 0.9);
+      border: 1px solid #00ffd5;
+      border-radius: 20px;
+      padding: 40px 50px;
+      box-shadow: 0 0 20px #00ffd580;
+      width: 360px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #00ffd5;
+      border-radius: 8px;
+      background: #111;
+      color: #00ffd5;
+      font-size: 1em;
+      text-align: center;
+    }
+
+    button {
+      background: #00ffd5;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 0;
+      width: 100%;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #00a58f;
+      color: #fff;
+      box-shadow: 0 0 10px #00ffd5;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px #00ffd5;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #aaa;
+    }
+
+    #loginStatus {
+      margin-top: 10px;
+      color: #00ffd5;
+    }
+  </style>
 </head>
 
-<body class="fundo-escuro">
+<body>
   <div class="container-menu" id="loginCard">
-    <h1 class="titulo">⚔️ DARK EPOCH ⚔️</h1>
-    <h2 class="subtitulo">Acesso Restrito</h2>
+    <h1>⚔️ DARK EPOCH ⚔️</h1>
+    <h2>Acesso Restrito</h2>
 
-    <input type="email" id="adminEmail" placeholder="Email (ex: admin@darkepoch.local)">
-    <input type="password" id="adminPassword" placeholder="Senha">
-
-    <div class="menu-botoes">
-      <button onclick="loginAdmin()">Entrar</button>
-    </div>
+    <input type="password" id="adminPassword" placeholder="Digite sua senha">
+    <button onclick="loginAdmin()">Entrar</button>
 
     <p id="loginStatus"></p>
-
-    <hr>
-
-    <button onclick="testeFirebase()">🔍 Testar conexão</button>
   </div>
-
-  <script>
-    // --- Teste de conexão manual ---
-    async function testeFirebase() {
-      try {
-        const snapshot = await db.collection("admin_users").get();
-        alert(`🔥 Firebase conectado! ${snapshot.size} registros encontrados em admin_users.`);
-      } catch (e) {
-        alert("❌ Erro ao conectar: " + e.message);
-      }
-    }
-  </script>
 </body>
 </html>
