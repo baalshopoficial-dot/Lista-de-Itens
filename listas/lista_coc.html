@@ -1,28 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Lista COC</title>
-  <link rel="stylesheet" href="../assets/css/style.css" />
+  <meta charset="UTF-8">
+  <title>Dark Epoch — Lista COC</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
 
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-</head>
-<body class="dp-center">
-  <div class="card" style="width:760px">
-    <div class="toolbar">
-      <h2 class="title" style="margin:0">LISTA COC</h2>
-      <div>
-        <button class="btn" onclick="location.href='../menu.html'">Voltar</button>
-        <button class="btn primary" onclick="salvarLista('coc')">Salvar</button>
-      </div>
-    </div>
-
-    <table class="table">
-      <thead><tr id="theadRow"><th>Nome</th><th>1</th><th>2</th><th>3</th></tr></thead>
-      <tbody id="listaCocBody"></tbody>
-    </table>
-  </div>
 
   <script>
     const firebaseConfig = {
@@ -35,12 +20,57 @@
       measurementId: "G-NM65WWHE91"
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    window.db = firebase.firestore();
+    const db = firebase.firestore();
   </script>
-  <script src="../js/script.js?v=2025-11-03-zip"></script>
+
+  <!-- Script principal -->
+  <script defer src="../js/script.js?v=2025-11-03"></script>
+
+  <style>
+    .top-menu {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .top-menu button {
+      min-width: 140px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>⚔️ Dark Epoch — Lista COC</h1>
+  <h2>Gerenciamento de Presenças</h2>
+
+  <!-- Menu superior -->
+  <div class="top-menu">
+    <button onclick="salvarLista('coc')">💾 Salvar</button>
+    <button onclick="carregarLista('coc')">🔄 Recarregar</button>
+    <button onclick="window.location.href='../admin/adicionar.html'">➕ Adicionar Nome</button>
+    <button onclick="window.location.href='../admin/remover.html'">🗑️ Remover Nome</button>
+    <button onclick="window.location.href='../menu.html'">🏠 Menu</button>
+  </div>
+
+  <!-- Container da tabela -->
+  <div class="table-container">
+    <table id="listaCoc">
+      <thead id="theadRow"></thead>
+      <tbody id="listaCocBody"></tbody>
+    </table>
+  </div>
+
+  <p id="status" style="color:#00ffd5; margin-top:10px;"></p>
+
   <script>
-    requireAdminOrRedirect();
-    carregarLista('coc');
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        await carregarLista("coc");
+      } catch (e) {
+        console.error("Erro ao carregar lista COC:", e);
+      }
+    });
   </script>
 </body>
 </html>
