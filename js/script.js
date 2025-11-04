@@ -109,39 +109,76 @@ function legacyToCols(item){
 }
 function ensureColsLength(cols, len){ const out=cols.slice(); while(out.length<len) out.push(false); return out; }
 
-async function carregarLista(nomeLista){
-  await ensureFirebase();
-  const tbody = document.getElementById("listaCocBody");
-  const theadRow = document.getElementById("theadRow");
-  if (!tbody || !theadRow) return;
-
-  const ref = db.collection(COL_LISTAS).doc(nomeLista);
-  const snap = await ref.get();
-  let dados=[];
-  if (snap.exists && Array.isArray(snap.data().nomes) && snap.data().nomes.length>0){
-    dados = snap.data().nomes;
-  } else {
-    dados = NOMES_INICIAIS.map(n=>({nome:n, cols:[false,false,false], data:new Date().toISOString()}));
-    await ref.set({nomes:dados});
+// ================== FUNÇÃO ATUALIZADA ==================
+async function carregarLista(nomeLista) {
+  try {
+    await ensureFirebase();
+  } catch (e) {
+    console.error("Erro ao iniciar Firebase:", e);
+    return;
   }
 
-  const colCount = Math.max(3, ...dados.map(x=>legacyToCols(x).length));
-  theadRow.innerHTML = '<th>Nome</th>' + Array.from({length: colCount}, (_,i)=>`<th>${i+1}</th>`).join('');
-  tbody.innerHTML = '';
+  const tbody = document.getElementById('listaCocBody');
+  const theadRow = document.getElementById('theadRow');
+  if (!tbody || !theadRow) {
+    console.warn("Elementos #listaCocBody ou #theadRow não encontrados na página.");
+    return;
+  }
 
-  dados.forEach(item=>{
-    const cols = ensureColsLength(legacyToCols(item), colCount);
-    const tr = document.createElement("tr");
-    const tdNome = document.createElement("td"); tdNome.textContent = item.nome; tdNome.className = "nome"; tr.appendChild(tdNome);
-    cols.forEach((v,i)=>{
-      const td=document.createElement("td");
-      const chk=document.createElement("input"); chk.type="checkbox"; chk.checked=!!v;
-      chk.addEventListener("change",()=>verificarLimpeza(nomeLista));
-      td.appendChild(chk); tr.appendChild(td);
+  try {
+    const ref = db.collection(COL_LISTAS).doc(nomeLista);
+    const snap = await ref.get();
+    let dados = [];
+
+    if (snap.exists && Array.isArray(snap.data().nomes)) {
+      // 🔹 Carrega dados existentes do Firestore
+      dados = snap.data().nomes;
+      console.log(`📥 Lista '${nomeLista}' carregada do Firestore (${dados.length} registros).`);
+    } else {
+      // 🔹 Cria lista inicial apenas se não existir nada
+      console.log(`⚠️ Lista '${nomeLista}' não encontrada — criando com nomes padrão.`);
+      dados = NOMES_INICIAIS.map(n => ({
+        nome: n,
+        cols: [false, false, false],
+        data: new Date().toISOString()
+      }));
+      await ref.set({ nomes: dados });
+    }
+
+    // Renderiza na tela
+    const colCount = Math.max(3, ...dados.map(x => (Array.isArray(x.cols) ? x.cols.length : 3)));
+    theadRow.innerHTML = '<th>Nome</th>' +
+      Array.from({ length: colCount }, (_, i) => `<th>${i + 1}</th>`).join('');
+    tbody.innerHTML = '';
+
+    dados.forEach(item => {
+      const cols = (Array.isArray(item.cols) ? item.cols.slice() : [false, false, false]);
+      while (cols.length < colCount) cols.push(false);
+
+      const tr = document.createElement('tr');
+      const tdNome = document.createElement('td');
+      tdNome.textContent = item.nome;
+      tdNome.className = 'nome';
+      tr.appendChild(tdNome);
+
+      cols.forEach((value, i) => {
+        const td = document.createElement('td');
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.checked = !!value;
+        chk.addEventListener('change', () => verificarLimpeza(nomeLista));
+        td.appendChild(chk);
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
     });
-    tbody.appendChild(tr);
-  });
+
+  } catch (err) {
+    console.error(`Erro ao carregar lista '${nomeLista}':`, err);
+  }
 }
+
 async function salvarLista(nomeLista){
   await ensureFirebase();
   const tbody=document.getElementById("listaCocBody");
@@ -349,3 +386,4 @@ window.escutarListaConsulta=escutarListaConsulta;
 window.executarBackupAutomatizado=executarBackupAutomatizado;
 
 console.log("🦇 script.js carregado — DarkEpoch (senha-only) v2025.11");
+
