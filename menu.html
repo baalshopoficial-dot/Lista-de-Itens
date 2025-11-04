@@ -1,90 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Dark Epoch — Painel Principal</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Dark Epoch — Painel</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
 
-  <!-- 🔥 Firebase SDKs -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-  <style>
-    body {
-      background: radial-gradient(circle at center, #000000 0%, #050505 60%, #000000 100%);
-      color: #00ffd5;
-      font-family: "Segoe UI", sans-serif;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .card {
-      background: rgba(10, 10, 10, 0.9);
-      border: 1px solid #00ffd5;
-      border-radius: 20px;
-      padding: 40px 60px;
-      box-shadow: 0 0 20px #00ffd580;
-      width: 400px;
-    }
-    h1 { font-size: 1.9em; margin-bottom: 10px; color: #00ffd5; text-shadow: 0 0 10px #00ffd5; }
-    h2 { font-size: 1.2em; color: #b5b5b5; margin-bottom: 20px; }
-    .btn-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 25px;
-    }
-    .btn-grid .btn, .btn-bottom .btn {
-      background: #00ffd5;
-      border: none;
-      color: #000;
-      font-weight: bold;
-      padding: 10px 0;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .btn-grid .btn:hover, .btn-bottom .btn:hover {
-      background: #00a58f;
-      color: #fff;
-      box-shadow: 0 0 10px #00ffd5;
-    }
-    .divider { width: 100%; height: 1px; background: #00ffd555; margin: 15px 0; }
-    .btn-bottom { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .footer { margin-top: 25px; font-size: 0.8em; color: #555; }
-  </style>
 </head>
+<body class="dp-center">
+  <div class="card menu-card">
+    <h1 class="title">🦇 Dark Epoch</h1>
+    <h2 class="subtitle">Painel Principal</h2>
 
-<body>
-  <div class="card">
-    <h1>🦇 Dark Epoch</h1>
-    <h2>Painel Principal</h2>
-
-    <div class="btn-grid">
-      <button class="btn" onclick="window.location.href='lista_coc.html'">Lista COC</button>
-      <button class="btn" onclick="window.location.href='lista_alma.html'">Lista ALMA</button>
-      <button class="btn" onclick="window.location.href='lista_bau.html'">Lista BAU</button>
-      <button class="btn" onclick="window.location.href='lista_chama.html'">Lista CHAMA</button>
+    <div class="grid2">
+      <button class="btn primary" onclick="location.href='listas/lista_coc.html'">Lista COC</button>
+      <button class="btn primary" onclick="location.href='listas/lista_alma.html'">Lista ALMA</button>
+      <button class="btn primary" onclick="location.href='listas/lista_bau.html'">Lista BAU</button>
+      <button class="btn primary" onclick="location.href='listas/lista_chama.html'">Lista CHAMA</button>
     </div>
 
-    <button class="btn" style="width: 100%; margin-bottom: 15px;" onclick="window.location.href='lista_pena.html'">Lista PENA</button>
+    <button class="btn primary block" style="margin-top:12px" onclick="location.href='listas/lista_pena.html'">Lista PENA</button>
 
     <div class="divider"></div>
 
-    <div class="btn-bottom">
-      <button class="btn" onclick="window.location.href='gerenciar_senhas.html'">Gerenciar Senhas</button>
-      <button class="btn" onclick="window.location.href='backup.html'">Backups</button>
+    <div class="grid2">
+      <button class="btn" onclick="location.href='admin/gerenciar_senhas.html'">Gerenciar Senhas</button>
+      <button class="btn" onclick="location.href='admin/backup.html'">Backups</button>
     </div>
 
-    <button class="btn" style="margin-top: 10px; width: 100%;" onclick="window.location.href='logs.html'">Logs</button>
+    <button class="btn block" style="margin-top:12px" onclick="location.href='consulta/logs.html'">Logs</button>
 
-    <div class="footer">v2025.11 | DarkEpoch System</div>
+    <p class="foot muted">v2025.11 | DarkEpoch System</p>
   </div>
 
-  <!-- 🚀 Inicialização Firebase -->
+  <!-- Init Firebase + script -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
@@ -96,22 +47,18 @@
       measurementId: "G-NM65WWHE91"
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    window.db = firebase.firestore();
   </script>
-
-  <!-- 🚀 Script principal -->
-  <script src="script.js?v=2025-11-02"></script>
-
-  <!-- 🧩 Verificação de login (executa só quando script.js estiver carregado) -->
+  <script src="js/script.js?v=2025-11-03-zip"></script>
   <script>
-    window.addEventListener("load", () => {
-      console.log("🦇 Teste de função requireAdminOrRedirect:", typeof requireAdminOrRedirect);
-
-      if (typeof requireAdminOrRedirect === "function") {
+    window.addEventListener('load', () => {
+      if (typeof requireAdminOrRedirect === 'function') {
         requireAdminOrRedirect();
       } else {
-        alert("⚠️ O script.js não foi carregado corretamente.\nVerifique se o caminho do arquivo está certo (ex: js/script.js).");
-        console.error("❌ requireAdminOrRedirect está undefined — verifique o caminho do script.js.");
+        if (localStorage.getItem('isAdmin') !== 'true') {
+          alert('⚠️ Acesso restrito — faça login.');
+          location.href = 'index.html';
+        }
       }
     });
   </script>
