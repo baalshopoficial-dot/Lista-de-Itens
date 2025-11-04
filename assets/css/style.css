@@ -1,144 +1,45 @@
-/* ======== Dark Epoch Visual Style ======== */
-body {
-  background-color: #000;
-  background-image: url('../img/background.jpg');
-  background-position: center;
-  background-size: cover;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  color: #eee;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+:root{
+  --c1:#00ffd5; --bg:#000; --bg2:#0a0a0a; --muted:#a9b0b3;
 }
-
-.fundo-escuro {
-  backdrop-filter: blur(3px);
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:Segoe UI,system-ui,-apple-system,Roboto,Arial;
+  color:var(--c1); background:radial-gradient(circle at center,#000,#030303 70%);
 }
-
-.container-menu {
-  background: rgba(10, 10, 10, 0.8);
-  border: 2px solid #00ffcc44;
-  box-shadow: 0 0 25px #00ffcc33;
-  border-radius: 18px;
-  padding: 35px 40px;
-  width: 400px;
-  max-width: 90vw;
-  text-align: center;
-  transition: all 0.3s ease;
+.dp-center{display:flex;align-items:center;justify-content:center}
+.card{
+  background:rgba(10,10,10,.92); border:1px solid var(--c1);
+  border-radius:16px; box-shadow:0 0 16px #00ffd580; padding:28px 32px;
 }
-
-.container-menu:hover {
-  box-shadow: 0 0 30px #00ffcc66;
+.auth-card{width:360px}
+.menu-card{width:420px}
+.title{margin:0 0 6px 0; text-align:center; text-shadow:0 0 10px var(--c1)}
+.subtitle{margin:0 0 18px 0; text-align:center; color:#c8c8c8; font-weight:500}
+input{
+  width:100%; padding:10px; margin:8px 0 10px; border-radius:10px;
+  border:1px solid var(--c1); background:#111; color:var(--c1); text-align:center;
 }
-
-.titulo {
-  font-size: 1.9em;
-  color: #00ffcc;
-  margin-bottom: 5px;
-  text-shadow: 0 0 10px #00ffcc55;
+.btn{
+  background:#1b1b1b; color:#e9fdf8; border:1px solid var(--c1);
+  padding:10px 0; border-radius:10px; cursor:pointer; transition:.25s;
 }
-
-.subtitulo {
-  color: #ccc;
-  font-size: 1.1em;
-  margin-bottom: 20px;
+.btn:hover{filter:brightness(1.15); box-shadow:0 0 12px #00ffd566}
+.btn.primary{background:var(--c1); color:#000; border-color:var(--c1)}
+.btn.block{width:100%}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.divider{height:1px; width:100%; background:#00ffd566; margin:16px 0}
+.foot{margin-top:12px; text-align:center}
+.muted{color:var(--muted)}
+.table{
+  width:100%; border-collapse:collapse; margin-top:8px;
 }
-
-input[type="password"],
-input[type="text"] {
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid #00ffcc55;
-  color: #00ffcc;
-  padding: 10px;
-  border-radius: 8px;
-  width: 80%;
-  margin-bottom: 15px;
-  outline: none;
-  transition: 0.3s;
+.table th,.table td{
+  border:1px solid #1e2a2b; padding:8px; text-align:center;
 }
-
-input:focus {
-  border-color: #00ffcc;
-  box-shadow: 0 0 8px #00ffccaa;
+.table th{background:#0e1617}
+.nome{text-align:left}
+.toolbar{
+  display:flex; gap:8px; align-items:center; justify-content:space-between; margin-top:8px;
 }
-
-.menu-botoes {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-button {
-  background-color: #00ffcc;
-  color: #000;
-  font-weight: bold;
-  border: none;
-  border-radius: 12px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 0 8px #00ffcc55;
-}
-
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 12px #00ffccaa;
-}
-
-button:active {
-  transform: scale(0.95);
-  box-shadow: 0 0 6px #00ffcc88;
-}
-
-hr {
-  width: 80%;
-  border: none;
-  border-top: 1px solid #00ffcc33;
-  margin: 25px auto;
-}
-
-.rodape {
-  margin-top: 20px;
-  color: #00ffcc88;
-  font-size: 0.8em;
-}
-
-.glow-ok {
-  box-shadow: 0 0 20px #00ffccaa;
-  transition: box-shadow 0.6s;
-}
-
-/* ====== Tabelas de Lista ====== */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  color: #ddd;
-  font-size: 0.9em;
-}
-
-th, td {
-  border: 1px solid #00ffcc22;
-  padding: 6px;
-  text-align: center;
-}
-
-th {
-  background: rgba(0, 255, 204, 0.1);
-  color: #00ffcc;
-}
-
-tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-tr:hover {
-  background: rgba(0, 255, 204, 0.1);
-  transition: background 0.2s ease;
-}
+.toolbar .btn{padding:8px 10px}
