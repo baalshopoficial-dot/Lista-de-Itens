@@ -1,95 +1,26 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Dark Epoch — Login</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/css/style.css" />
 
-  <!-- 🔥 Firebase SDKs -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-  <style>
-    body {
-      background: radial-gradient(circle at center, #000, #030303 70%);
-      color: #00ffd5;
-      font-family: "Segoe UI", sans-serif;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .container-menu {
-      background: rgba(10, 10, 10, 0.9);
-      border: 1px solid #00ffd5;
-      border-radius: 20px;
-      padding: 40px 50px;
-      box-shadow: 0 0 20px #00ffd580;
-      width: 360px;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #00ffd5;
-      border-radius: 8px;
-      background: #111;
-      color: #00ffd5;
-      font-size: 1em;
-      text-align: center;
-    }
-
-    button {
-      background: #00ffd5;
-      color: #000;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 0;
-      width: 100%;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: #00a58f;
-      color: #fff;
-      box-shadow: 0 0 10px #00ffd5;
-    }
-
-    h1 {
-      margin-bottom: 10px;
-      text-shadow: 0 0 10px #00ffd5;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-      color: #aaa;
-    }
-
-    #loginStatus {
-      margin-top: 10px;
-      color: #00ffd5;
-    }
-  </style>
 </head>
+<body class="dp-center">
+  <div class="card auth-card" id="loginCard">
+    <h1 class="title">⚔️ DARK EPOCH ⚔️</h1>
+    <h2 class="subtitle">Acesso Restrito</h2>
 
-<body>
-  <div class="container-menu" id="loginCard">
-    <h1>⚔️ DARK EPOCH ⚔️</h1>
-    <h2>Acesso Restrito</h2>
+    <input type="password" id="adminPassword" placeholder="Digite sua senha" />
+    <button id="btnLogin" class="btn primary">Entrar</button>
 
-    <input type="password" id="adminPassword" placeholder="Digite sua senha">
-    <button id="btnLogin">Entrar</button>
-
-    <p id="loginStatus"></p>
+    <p id="loginStatus" class="muted"></p>
   </div>
 
-  <!-- 🚀 Firebase inicialização -->
+  <!-- Init Firebase + script principal -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
@@ -101,28 +32,17 @@
       measurementId: "G-NM65WWHE91"
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    window.db = firebase.firestore();
   </script>
-
-  <!-- 🚀 Script principal -->
-  <script src="script.js?v=2025-11-02"></script>
-
-  <!-- 🎯 Depuração visual -->
+  <script src="js/script.js?v=2025-11-03-zip"></script>
   <script>
-    document.getElementById("btnLogin").addEventListener("click", async () => {
-      try {
-        if (typeof loginAdmin !== "function") {
-          alert("⚠️ loginAdmin() não está definido! Verifique se o script.js foi carregado corretamente.");
-          return;
-        }
-        await loginAdmin();
-      } catch (e) {
-        alert("❌ Erro inesperado no login: " + e.message);
+    document.getElementById('btnLogin').addEventListener('click', () => {
+      if (typeof loginAdmin !== 'function') {
+        alert("⚠️ script.js não carregou (verifique caminho em /js/).");
+        return;
       }
+      loginAdmin(); // senha master/admin ou senhas do Firestore
     });
-
-    // Mostra no console se o script foi carregado
-    console.log("✅ Index carregado. Teste -> typeof loginAdmin:", typeof loginAdmin);
   </script>
 </body>
 </html>
