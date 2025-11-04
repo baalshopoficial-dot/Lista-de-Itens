@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Debug Firebase</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body class="dp-center">
+  <div class="card" style="width:620px">
+    <h2 class="title">Debug Firebase</h2>
+    <div id="out" class="muted">Testando...</div>
+    <div class="divider"></div>
+    <button class="btn" onclick="location.href='menu.html'">Voltar</button>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
+      authDomain: "mu-epoch.firebaseapp.com",
+      projectId: "mu-epoch",
+      storageBucket: "mu-epoch.firebasestorage.app",
+      messagingSenderId: "995547087811",
+      appId: "1:995547087811:web:9a4581071b931f9364f376",
+      measurementId: "G-NM65WWHE91"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db=firebase.firestore();
+
+    (async ()=>{
+      const out=document.getElementById('out');
+      try{
+        const c1=await db.collection("listas_epoch").get();
+        const c2=await db.collection("senhas_epoch").get();
+        const c3=await db.collection("logs_actions").get();
+        out.innerHTML = `
+          <p>✅ Conectado ao Firestore.</p>
+          <p>listas_epoch: <b>${c1.size}</b> doc(s)</p>
+          <p>senhas_epoch: <b>${c2.size}</b> doc(s)</p>
+          <p>logs_actions: <b>${c3.size}</b> doc(s)</p>
+          <p class="muted">Se algum número for 0, é normal na primeira execução.</p>
+        `;
+      }catch(e){
+        out.textContent="❌ Erro: "+e.message;
+      }
+    })();
+  </script>
+</body>
+</html>
