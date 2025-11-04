@@ -1,58 +1,37 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Dark Epoch — Backups</title>
-  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta charset="UTF-8" />
+  <title>Backups</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <script defer src="../js/script.js?v=2025-10-31"></script>
 </head>
-<body class="fundo-escuro" onload="requireMasterOrRedirect(); carregarBackups();">
-  <div class="container-menu">
-    <h1 class="titulo">Backups das Listas</h1>
-    <button onclick="fazerBackup()">💾 Fazer Backup Manual</button>
-    <h3>Histórico de Backups</h3>
-    <ul id="listaBackups" style="list-style:none; padding:0;"></ul>
-    <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
+<body class="dp-center">
+  <div class="card" style="width:600px">
+    <div class="toolbar">
+      <h2 class="title" style="margin:0">Backups</h2>
+      <div><button class="btn" onclick="location.href='../menu.html'">Voltar</button></div>
+    </div>
+    <p class="muted">Os backups automáticos rodam às 13:30 e 21:30 (±5 min).</p>
+    <button class="btn primary block" onclick="executarBackupAutomatizado(); alert('Solicitado. Aguarde janela útil ou veja logs.')">Forçar (se janela ativa)</button>
   </div>
 
   <script>
-    async function carregarBackups() {
-      const db = await ensureFirebase();
-      const ref = db.collection('backups_listas').orderBy('data', 'desc');
-      const snap = await ref.get();
-      const lista = document.getElementById('listaBackups');
-      lista.innerHTML = '';
-      snap.forEach(doc => {
-        const { data, totalNomes } = doc.data();
-        const li = document.createElement('li');
-        li.textContent = `📦 ${new Date(data).toLocaleString()} — ${totalNomes} nomes`;
-        lista.appendChild(li);
-      });
-    }
-
-    async function fazerBackup() {
-      const db = await ensureFirebase();
-      const colecoes = ['coc', 'alma', 'bau', 'chama', 'pena'];
-      let total = 0;
-      const backup = {};
-
-      for (const nome of colecoes) {
-        const doc = await db.collection('listas_epoch').doc(nome).get();
-        backup[nome] = doc.exists ? doc.data().nomes : [];
-        total += backup[nome].length;
-      }
-
-      await db.collection('backups_listas').add({
-        data: new Date().toISOString(),
-        totalNomes: total,
-        conteudo: backup
-      });
-
-      alert('Backup salvo com sucesso!');
-      carregarBackups();
-    }
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
+      authDomain: "mu-epoch.firebaseapp.com",
+      projectId: "mu-epoch",
+      storageBucket: "mu-epoch.firebasestorage.app",
+      messagingSenderId: "995547087811",
+      appId: "1:995547087811:web:9a4581071b931f9364f376",
+      measurementId: "G-NM65WWHE91"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    window.db = firebase.firestore();
   </script>
+  <script src="../js/script.js?v=2025-11-03-zip"></script>
+  <script>requireMasterOrRedirect();</script>
 </body>
 </html>
