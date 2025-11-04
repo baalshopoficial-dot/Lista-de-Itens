@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gerenciar Senhas</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body class="dp-center">
+  <div class="card" style="width:640px">
+    <div class="toolbar">
+      <h2 class="title" style="margin:0">Gerenciar Senhas</h2>
+      <div>
+        <button class="btn" onclick="location.href='../menu.html'">Voltar</button>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <input id="nomeSenha" placeholder="Nome do usuário" />
+      <input id="novaSenha" placeholder="Nova senha" />
+    </div>
+    <div class="toolbar" style="justify-content:flex-end">
+      <button class="btn primary" onclick="criarSenhaUI()">Criar senha</button>
+    </div>
+    <p id="statusSenha" class="muted"></p>
+
+    <table class="table" style="margin-top:10px">
+      <thead><tr><th>Usuário</th><th>Hash</th><th>Ações</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
+      authDomain: "mu-epoch.firebaseapp.com",
+      projectId: "mu-epoch",
+      storageBucket: "mu-epoch.firebasestorage.app",
+      messagingSenderId: "995547087811",
+      appId: "1:995547087811:web:9a4581071b931f9364f376",
+      measurementId: "G-NM65WWHE91"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    window.db = firebase.firestore();
+  </script>
+  <script src="../js/script.js?v=2025-11-03-zip"></script>
+  <script>
+    requireMasterOrRedirect();
+    carregarSenhas();
+  </script>
+</body>
+</html>
