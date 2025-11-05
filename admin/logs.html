@@ -2,36 +2,34 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Dark Epoch — Logs</title>
+  <title>Logs — Dark Epoch</title>
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <script defer src="../js/script.js?v=2025-10-31"></script>
+  <script defer src="../js/script.js?v=2025-11-04"></script>
 </head>
-<body class="fundo-escuro" onload="requireMasterOrRedirect(); carregarLogs();">
-  <div class="container-menu">
-    <h1 class="titulo">Logs de Atividades</h1>
-    <table border="1" style="width:100%; text-align:center; border-color:#00ffcc;">
-      <thead>
-        <tr><th>Data</th><th>Usuário</th><th>Ação</th></tr>
-      </thead>
-      <tbody id="tabelaLogs"></tbody>
-    </table>
+
+<body onload="requireAdminOrRedirect(); carregarLogs();">
+  <div class="container">
+    <h1>📜 Logs do Sistema</h1>
     <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
+
+    <table id="tabelaLogs">
+      <thead><tr><th>Data</th><th>Usuário</th><th>Ação</th></tr></thead>
+      <tbody></tbody>
+    </table>
   </div>
 
   <script>
     async function carregarLogs() {
-      const db = await ensureFirebase();
-      const ref = db.collection('logs_actions').orderBy('data', 'desc');
-      const snap = await ref.get();
-      const tbody = document.getElementById('tabelaLogs');
+      await ensureFirebase();
+      const tbody = document.querySelector('#tabelaLogs tbody');
       tbody.innerHTML = '';
-
-      snap.forEach(doc => {
-        const { data, usuario, acao } = doc.data();
+      const snapshot = await db.collection('logs_actions').orderBy('data', 'desc').limit(50).get();
+      snapshot.forEach(doc => {
+        const l = doc.data();
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${new Date(data).toLocaleString()}</td><td>${usuario}</td><td>${acao}</td>`;
+        tr.innerHTML = `<td>${new Date(l.data).toLocaleString()}</td><td>${l.usuario}</td><td>${l.acao}</td>`;
         tbody.appendChild(tr);
       });
     }
