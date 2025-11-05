@@ -2,85 +2,42 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Dark Epoch — Remover Nome</title>
+  <title>Remover Nome — Dark Epoch</title>
   <link rel="stylesheet" href="../assets/css/style.css">
-
-  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
-      authDomain: "mu-epoch.firebaseapp.com",
-      projectId: "mu-epoch",
-      storageBucket: "mu-epoch.firebasestorage.app",
-      messagingSenderId: "995547087811",
-      appId: "1:995547087811:web:9a4581071b931f9364f376",
-      measurementId: "G-NM65WWHE91"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-  </script>
-
-  <script defer src="../js/script.js?v=2025-11-03"></script>
-
-  <style>
-    select {
-      width: 100%;
-      padding: 10px;
-      background: #111;
-      color: #00ffd5;
-      border: 1px solid #00ffd5;
-      border-radius: 8px;
-      margin: 10px 0;
-    }
-  </style>
+  <script defer src="../js/script.js?v=2025-11-04"></script>
 </head>
 
-<body>
-  <h1>⚔️ Dark Epoch — Remover Nome</h1>
-  <h2>Selecione um nome para remover de todas as listas</h2>
+<body onload="requireAdminOrRedirect()">
+  <div class="container">
+    <h1>🗑️ Remover Nome</h1>
 
-  <div class="container-menu">
-    <select id="nomeRemover"></select>
-    <button onclick="removerSelecionado()">🗑️ Remover Selecionado</button>
+    <input type="text" id="nomeRemover" placeholder="Digite o nome a remover">
+
+    <fieldset style="margin-top: 15px; text-align: left;">
+      <legend>Selecione as listas:</legend>
+      <label><input type="checkbox" class="listaChk" value="coc"> Lista COC</label><br>
+      <label><input type="checkbox" class="listaChk" value="alma"> Lista ALMA</label><br>
+      <label><input type="checkbox" class="listaChk" value="bau"> Lista BAU</label><br>
+      <label><input type="checkbox" class="listaChk" value="chama"> Lista CHAMA</label><br>
+      <label><input type="checkbox" class="listaChk" value="pena"> Lista PENA</label><br>
+      <label><input type="checkbox" id="chkAll" onchange="toggleAllLists()"> Todas as Listas</label>
+    </fieldset>
+
+    <div class="menu-top">
+      <button onclick="removerNome()">🗑️ Remover</button>
+      <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
+    </div>
+
     <p id="statusRemover"></p>
-    <hr>
-    <button onclick="window.location.href='../menu.html'">🏠 Voltar ao Menu</button>
   </div>
 
   <script>
-    async function carregarNomes() {
-      const select = document.getElementById("nomeRemover");
-      select.innerHTML = "<option>Carregando nomes...</option>";
-      try {
-        await ensureFirebase();
-        const ref = db.collection("listas_epoch").doc("coc");
-        const snap = await ref.get();
-        if (snap.exists) {
-          const nomes = snap.data().nomes || [];
-          select.innerHTML = nomes
-            .map(n => `<option value="${n.nome}">${n.nome}</option>`)
-            .join("");
-        } else {
-          select.innerHTML = "<option>Nenhum nome encontrado</option>";
-        }
-      } catch (e) {
-        console.error("Erro ao carregar nomes:", e);
-        select.innerHTML = "<option>Erro ao carregar</option>";
-      }
+    function toggleAllLists() {
+      const allChecked = document.getElementById('chkAll').checked;
+      document.querySelectorAll('.listaChk').forEach(chk => chk.checked = allChecked);
     }
-
-    async function removerSelecionado() {
-      const nome = document.getElementById("nomeRemover").value;
-      if (!nome) return alert("Selecione um nome para remover.");
-      await excluirNomeGlobal(nome);
-      document.getElementById("statusRemover").textContent = `✅ Nome "${nome}" removido de todas as listas.`;
-      carregarNomes();
-    }
-
-    document.addEventListener("DOMContentLoaded", carregarNomes);
   </script>
 </body>
 </html>
