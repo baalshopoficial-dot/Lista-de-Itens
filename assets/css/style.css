@@ -1,179 +1,185 @@
-/* === DARK EPOCH - ESTILO GERAL === */
+/* 🌑 DARK EPOCH THEME v2025.11 */
+/* Tema visual unificado para todas as telas do sistema */
+
 body {
-  background: radial-gradient(circle at center, #000, #030303 70%);
-  color: #00ffd5;
-  font-family: "Segoe UI", sans-serif;
-  text-align: center;
-  min-height: 100vh;
   margin: 0;
   padding: 0;
+  background: radial-gradient(circle at center, #000 0%, #030303 70%, #000 100%);
+  color: #00ffd5;
+  font-family: "Segoe UI", sans-serif;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  height: 100vh;
+  overflow-x: hidden;
 }
 
-/* === TÍTULOS === */
-h1, h2, h3 {
+/* ===== CONTAINERS ===== */
+.container, .card {
+  background: rgba(10, 10, 10, 0.92);
+  border: 1px solid #00ffd5;
+  border-radius: 18px;
+  padding: 35px 45px;
+  box-shadow: 0 0 25px #00ffd580;
+  text-align: center;
+  width: min(90%, 800px);
+  max-height: 95vh;
+  overflow-y: auto;
+}
+
+.container h1, .card h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
   color: #00ffd5;
   text-shadow: 0 0 10px #00ffd5;
+}
+
+.container h2, .card h2 {
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+/* ===== INPUTS ===== */
+input[type="text"], input[type="password"], input[type="email"] {
+  width: 100%;
+  padding: 12px;
   margin: 10px 0;
-}
-
-h2 {
-  color: #b5b5b5;
-  font-weight: normal;
-}
-
-/* === CONTAINER PRINCIPAL === */
-.container-menu, .card {
-  background: rgba(10, 10, 10, 0.9);
+  border-radius: 8px;
   border: 1px solid #00ffd5;
-  border-radius: 20px;
-  box-shadow: 0 0 20px #00ffd580;
-  padding: 30px 50px;
-  width: 90%;
-  max-width: 600px;
-  margin-top: 40px;
+  background: #111;
+  color: #00ffd5;
+  font-size: 1em;
+  text-align: center;
+  outline: none;
+  transition: 0.3s;
 }
 
-/* === BOTÕES === */
+input:focus {
+  box-shadow: 0 0 10px #00ffd5;
+}
+
+/* ===== BUTTONS ===== */
 button {
   background: #00ffd5;
   color: #000;
   border: none;
   border-radius: 8px;
   padding: 10px 15px;
+  margin: 5px;
   font-weight: bold;
-  font-size: 1em;
   cursor: pointer;
   transition: 0.3s;
-  margin: 4px;
-  box-shadow: 0 0 8px #00ffd5;
 }
 
 button:hover {
   background: #00a58f;
   color: #fff;
-  box-shadow: 0 0 14px #00ffd5;
+  box-shadow: 0 0 12px #00ffd5;
 }
 
-/* === INPUTS === */
-input[type="text"], input[type="password"], input[type="email"] {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0 16px 0;
-  border: 1px solid #00ffd5;
-  border-radius: 8px;
-  background: #111;
-  color: #00ffd5;
-  font-size: 1em;
-  text-align: center;
-  outline: none;
-}
-
-input::placeholder {
-  color: #00ffd580;
-}
-
-/* === TABELA === */
-.table-container {
-  width: 95%;
-  max-width: 1200px;
-  margin: 20px auto;
-  overflow-x: auto;
-  border: 1px solid #00ffd5;
-  border-radius: 12px;
-  box-shadow: 0 0 10px #00ffd550;
-  background-color: rgba(0, 0, 0, 0.6);
-}
-
+/* ===== TABLES ===== */
 table {
   width: 100%;
   border-collapse: collapse;
-  color: #00ffd5;
-  text-align: center;
-  font-size: 0.9em;
-  min-width: 600px;
+  margin-top: 20px;
+  border: 1px solid #00ffd5;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 th, td {
-  border: 1px solid #00ffd533;
-  padding: 8px 10px;
-  white-space: nowrap;
+  border: 1px solid #00ffd530;
+  padding: 10px;
+  text-align: center;
 }
 
 th {
-  background-color: rgba(0, 255, 213, 0.15);
-  text-shadow: 0 0 6px #00ffd5;
+  background: #00ffd520;
+  color: #00ffd5;
+  text-shadow: 0 0 5px #00ffd5;
 }
 
-tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.02);
-}
-
-/* === NOMES === */
 td.nome {
   font-weight: bold;
-  color: #00ffe0;
-  text-shadow: 0 0 5px #00ffd5;
+  text-align: left;
+  padding-left: 15px;
+  color: #00ffee;
 }
 
-/* === SCROLL CUSTOM === */
-.table-container::-webkit-scrollbar {
-  height: 8px;
-}
-.table-container::-webkit-scrollbar-thumb {
-  background: #00ffd5;
-  border-radius: 8px;
-}
-.table-container::-webkit-scrollbar-track {
-  background: #050505;
+/* ===== BUTTON GRIDS ===== */
+.btn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
 }
 
-/* === STATUS / FEEDBACK === */
-#loginStatus, #status, #statusRemover, #statusSenha {
-  color: #00ffd5;
-  margin-top: 10px;
-  text-shadow: 0 0 5px #00ffd5;
+.btn-bottom {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
 }
 
-/* === BRILHO DE SUCESSO === */
-.glow-ok {
-  box-shadow: 0 0 20px #00ffd5 !important;
-  transition: box-shadow 0.5s ease-in-out;
-}
-
-/* === BOTÕES AGRUPADOS === */
-.menu-botoes {
+/* ===== MENU SUPERIOR ===== */
+.menu-top {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
-  margin: 12px 0;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
 }
 
-/* === DIVISOR === */
-hr {
-  border: none;
+/* ===== DIVISÕES ===== */
+.divider {
+  width: 100%;
   height: 1px;
-  background: #00ffd533;
+  background: #00ffd550;
   margin: 20px 0;
 }
 
-/* === RESPONSIVIDADE === */
-@media (max-width: 900px) {
-  .container-menu, .card {
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #00ffd5;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #111;
+}
+
+/* ===== GLOW EFFECTS ===== */
+.glow-ok {
+  box-shadow: 0 0 25px #00ffcc;
+  transition: box-shadow 0.5s ease;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  margin-top: 25px;
+  font-size: 0.85em;
+  color: #777;
+  text-align: center;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 600px) {
+  body {
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+
+  .container, .card {
     width: 95%;
-    padding: 20px;
+    padding: 25px;
   }
 
   table {
-    font-size: 0.8em;
-    min-width: 400px;
+    font-size: 0.85em;
   }
 
   button {
     font-size: 0.9em;
-    padding: 8px 10px;
   }
 }
