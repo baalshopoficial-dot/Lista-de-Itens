@@ -2,38 +2,24 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Dark Epoch — Lista CHAMA</title>
+  <title>Lista CHAMA — Dark Epoch</title>
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
-      authDomain: "mu-epoch.firebaseapp.com",
-      projectId: "mu-epoch",
-      storageBucket: "mu-epoch.firebasestorage.app",
-      messagingSenderId: "995547087811",
-      appId: "1:995547087811:web:9a4581071b931f9364f376",
-      measurementId: "G-NM65WWHE91"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-  </script>
-  <script defer src="../js/script.js?v=2025-11-03"></script>
+  <script defer src="../js/script.js?v=2025-11-04"></script>
 </head>
-<body>
-  <h1>⚔️ Dark Epoch — Lista CHAMA</h1>
-  <h2>Gerenciamento de Presenças</h2>
-  <div class="top-menu">
-    <button onclick="salvarLista('chama')">💾 Salvar</button>
-    <button onclick="carregarLista('chama')">🔄 Recarregar</button>
-    <button onclick="window.location.href='../admin/adicionar.html'">➕ Adicionar</button>
-    <button onclick="window.location.href='../admin/remover.html'">🗑️ Remover</button>
-    <button onclick="window.location.href='../menu.html'">🏠 Menu</button>
+<body onload="carregarLista('chama')">
+  <div class="container">
+    <h1>🔥 LISTA CHAMA 🔥</h1>
+    <div class="menu-top">
+      <button onclick="salvarLista('chama')">💾 Salvar</button>
+      <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
+    </div>
+
+    <table>
+      <thead><tr id="theadRow"><th>Nome</th><th>1</th><th>2</th><th>3</th></tr></thead>
+      <tbody id="listaCocBody"></tbody>
+    </table>
   </div>
-  <div class="table-container">
-    <table><thead id="theadRow"></thead><tbody id="listaCocBody"></tbody></table>
-  </div>
-  <script>document.addEventListener("DOMContentLoaded",()=>carregarLista("chama"));</script>
 </body>
 </html>
