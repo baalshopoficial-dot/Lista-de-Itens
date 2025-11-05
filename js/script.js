@@ -3,8 +3,8 @@
 // ==========================================================
 
 // ================== CONFIGURAÇÃO ==================
-const ADMIN_HASH = "18b68013caff50520c9706a2b96b2370f8fe3cc5be15db5dca5324bf48d52a77"; // 
-const ADMIN_MASTER_HASH = "500a3ec61db2d71d839cb84e3ebdc5932a3753fc657011ecf7a58cd4251c836a"; // 
+const ADMIN_HASH = "18b68013caff50520c9706a2b96b2370f8fe3cc5be15db5dca5324bf48d52a77"; // D3v1L2Br
+const ADMIN_MASTER_HASH = "500a3ec61db2d71d839cb84e3ebdc5932a3753fc657011ecf7a58cd4251c836a"; // cp1115bupnf
 
 const firebaseConfig = {
   apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
