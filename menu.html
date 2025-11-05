@@ -1,66 +1,63 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Dark Epoch — Painel</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <meta charset="UTF-8">
+  <title>Dark Epoch — Painel Principal</title>
+  <link rel="stylesheet" href="assets/css/style.css">
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-</head>
-<body class="dp-center">
-  <div class="card menu-card">
-    <h1 class="title">🦇 Dark Epoch</h1>
-    <h2 class="subtitle">Painel Principal</h2>
 
-    <div class="grid2">
-      <button class="btn primary" onclick="location.href='listas/lista_coc.html'">Lista COC</button>
-      <button class="btn primary" onclick="location.href='listas/lista_alma.html'">Lista ALMA</button>
-      <button class="btn primary" onclick="location.href='listas/lista_bau.html'">Lista BAU</button>
-      <button class="btn primary" onclick="location.href='listas/lista_chama.html'">Lista CHAMA</button>
-    </div>
-
-    <button class="btn primary block" style="margin-top:12px" onclick="location.href='listas/lista_pena.html'">Lista PENA</button>
-
-    <div class="divider"></div>
-
-    <div class="grid2">
-      <button class="btn" onclick="location.href='admin/gerenciar_senhas.html'">Gerenciar Senhas</button>
-      <button class="btn" onclick="location.href='admin/backup.html'">Backups</button>
-    </div>
-
-    <button class="btn block" style="margin-top:12px" onclick="location.href='consulta/logs.html'">Logs</button>
-
-    <p class="foot muted">v2025.11 | DarkEpoch System</p>
-  </div>
-
-  <!-- Init Firebase + script -->
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
-      authDomain: "mu-epoch.firebaseapp.com",
-      projectId: "mu-epoch",
-      storageBucket: "mu-epoch.firebasestorage.app",
-      messagingSenderId: "995547087811",
-      appId: "1:995547087811:web:9a4581071b931f9364f376",
-      measurementId: "G-NM65WWHE91"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    window.db = firebase.firestore();
-  </script>
-  <script src="js/script.js?v=2025-11-03-zip"></script>
-  <script>
-    window.addEventListener('load', () => {
-      if (typeof requireAdminOrRedirect === 'function') {
+    window.addEventListener("DOMContentLoaded", () => {
+      if (typeof requireAdminOrRedirect === "function") {
         requireAdminOrRedirect();
       } else {
-        if (localStorage.getItem('isAdmin') !== 'true') {
-          alert('⚠️ Acesso restrito — faça login.');
-          location.href = 'index.html';
+        if (localStorage.getItem("isAdmin") !== "true") {
+          alert("⚠️ Acesso restrito — faça login novamente.");
+          window.location.href = "index.html";
         }
       }
     });
   </script>
+
+  <script defer src="js/script.js?v=2025-11-04"></script>
+</head>
+
+<body>
+  <div class="card">
+    <h1>🦇 Dark Epoch</h1>
+    <h2>Painel Principal</h2>
+
+    <!-- 🔹 Botões de gerenciamento -->
+    <div class="menu-top">
+      <button onclick="window.location.href='admin/adicionar.html'">➕ Adicionar Nome</button>
+      <button onclick="window.location.href='admin/remover.html'">🗑️ Remover Nome</button>
+    </div>
+
+    <!-- 🔹 Listas principais -->
+    <div class="btn-grid">
+      <button class="btn" onclick="window.location.href='listas/lista_coc.html'">Lista COC</button>
+      <button class="btn" onclick="window.location.href='listas/lista_alma.html'">Lista ALMA</button>
+      <button class="btn" onclick="window.location.href='listas/lista_bau.html'">Lista BAU</button>
+      <button class="btn" onclick="window.location.href='listas/lista_chama.html'">Lista CHAMA</button>
+      <button class="btn" style="grid-column: span 2;" onclick="window.location.href='listas/lista_pena.html'">Lista PENA</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 🔹 Área administrativa -->
+    <div class="btn-bottom">
+      <button class="btn" onclick="window.location.href='admin/gerenciar_senhas.html'">Gerenciar Senhas</button>
+      <button class="btn" onclick="window.location.href='admin/backup.html'">Backups</button>
+    </div>
+
+    <button class="btn" style="margin-top: 10px; width: 100%;" onclick="window.location.href='admin/logs.html'">Logs</button>
+
+    <div class="footer">
+      v2025.11 | DarkEpoch System
+    </div>
+  </div>
 </body>
 </html>
