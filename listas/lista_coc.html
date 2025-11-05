@@ -2,75 +2,24 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Dark Epoch — Lista COC</title>
+  <title>Lista COC — Dark Epoch</title>
   <link rel="stylesheet" href="../assets/css/style.css">
-
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
-      authDomain: "mu-epoch.firebaseapp.com",
-      projectId: "mu-epoch",
-      storageBucket: "mu-epoch.firebasestorage.app",
-      messagingSenderId: "995547087811",
-      appId: "1:995547087811:web:9a4581071b931f9364f376",
-      measurementId: "G-NM65WWHE91"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-  </script>
-
-  <!-- Script principal -->
-  <script defer src="../js/script.js?v=2025-11-03"></script>
-
-  <style>
-    .top-menu {
-      margin-top: 25px;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .top-menu button {
-      min-width: 140px;
-    }
-  </style>
+  <script defer src="../js/script.js?v=2025-11-04"></script>
 </head>
+<body onload="carregarLista('coc')">
+  <div class="container">
+    <h1>⚔️ LISTA COC ⚔️</h1>
+    <div class="menu-top">
+      <button onclick="salvarLista('coc')">💾 Salvar</button>
+      <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
+    </div>
 
-<body>
-  <h1>⚔️ Dark Epoch — Lista COC</h1>
-  <h2>Gerenciamento de Presenças</h2>
-
-  <!-- Menu superior -->
-  <div class="top-menu">
-    <button onclick="salvarLista('coc')">💾 Salvar</button>
-    <button onclick="carregarLista('coc')">🔄 Recarregar</button>
-    <button onclick="window.location.href='../admin/adicionar.html'">➕ Adicionar Nome</button>
-    <button onclick="window.location.href='../admin/remover.html'">🗑️ Remover Nome</button>
-    <button onclick="window.location.href='../menu.html'">🏠 Menu</button>
-  </div>
-
-  <!-- Container da tabela -->
-  <div class="table-container">
-    <table id="listaCoc">
-      <thead id="theadRow"></thead>
+    <table>
+      <thead><tr id="theadRow"><th>Nome</th><th>1</th><th>2</th><th>3</th></tr></thead>
       <tbody id="listaCocBody"></tbody>
     </table>
   </div>
-
-  <p id="status" style="color:#00ffd5; margin-top:10px;"></p>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      try {
-        await carregarLista("coc");
-      } catch (e) {
-        console.error("Erro ao carregar lista COC:", e);
-      }
-    });
-  </script>
 </body>
 </html>
