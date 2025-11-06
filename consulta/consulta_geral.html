@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Consulta Geral — Dark Epoch</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script defer src="../js/script.js?v=2025-11-05"></script>
+<style>
+.grid-consulta{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card-consulta{border:1px solid #00ffd5;border-radius:14px;padding:12px;background:#0f0f0f}
+.card-consulta h3{margin:0 0 8px;text-align:center}
+</style>
+<script>
+window.addEventListener('DOMContentLoaded', ()=>{
+  if (!firebase.apps.length) return alert("Firebase não inicializado.");
+  window.db=firebase.firestore();
+  escutarListaConsulta('coc','th_coc','tb_coc');
+  escutarListaConsulta('alma','th_alma','tb_alma');
+  escutarListaConsulta('bau','th_bau','tb_bau');
+  escutarListaConsulta('chama','th_chama','tb_chama');
+  escutarListaConsulta('pena','th_pena','tb_pena');
+});
+</script>
+</head>
+<body>
+  <div class="container">
+    <h1>Consulta Geral</h1>
+    <div class="grid-consulta">
+      <div class="card-consulta"><h3>COC</h3><table><thead id="th_coc"></thead><tbody id="tb_coc"></tbody></table></div>
+      <div class="card-consulta"><h3>ALMA</h3><table><thead id="th_alma"></thead><tbody id="tb_alma"></tbody></table></div>
+      <div class="card-consulta"><h3>BAU</h3><table><thead id="th_bau"></thead><tbody id="tb_bau"></tbody></table></div>
+      <div class="card-consulta"><h3>CHAMA</h3><table><thead id="th_chama"></thead><tbody id="tb_chama"></tbody></table></div>
+      <div class="card-consulta"><h3>PENA</h3><table><thead id="th_pena"></thead><tbody id="tb_pena"></tbody></table></div>
+    </div>
+  </div>
+</body>
+</html>
