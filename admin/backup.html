@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Backups — Dark Epoch</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script defer src="../js/script.js?v=2025-11-05"></script>
+</head>
+<body onload="requireMasterOrRedirect(); listarBackups();">
+  <div class="container">
+    <h1>💾 Backups</h1>
+    <div class="menu-top">
+      <button onclick="executarBackupManual()">📦 Fazer Backup Agora</button>
+      <button onclick="location.href='../menu.html'">⬅️ Voltar</button>
+    </div>
+
+    <table id="tabelaBackups">
+      <thead><tr><th>Data</th><th>Registros</th><th>Tipo</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+  async function listarBackups(){
+    await ensureFirebase();
+    const tbody=document.querySelector('#tabelaBackups tbody');
+    const snap=await db.collection('backups_listas').orderBy('data','desc').get();
+    tbody.innerHTML='';
+    snap.forEach(doc=>{
+      const b=doc.data();
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${new Date(b.data).toLocaleString()}</td><td>${b.totalNomes||0}</td><td>${b.tipo||''}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+  async function executarBackupManual(){
+    await ensureFirebase();
+    const listas=['coc','alma','bau','chama','pena'];
+    const conteudo={}; let total=0;
+    for(const l of listas){
+      const s=await db.collection('listas_epoch').doc(l).get();
+      conteudo[l]=s.exists?(s.data().nomes||[]):[];
+      total += conteudo[l].length;
+    }
+    await db.collection('backups_listas').add({data:new Date().toISOString(), totalNomes:total, conteudo, tipo:'manual'});
+    alert(`✅ Backup manual concluído (${total} registros).`);
+    listarBackups();
+  }
+  </script>
+</body>
+</html>
