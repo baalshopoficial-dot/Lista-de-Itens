@@ -114,56 +114,70 @@ const NOMES_INICIAIS = [
 ];
 
 // ================== Listas (carregar/salvar) ==================
-async function carregarLista(nomeLista){
+// ================== Listas (carregar/salvar) ==================
+async function carregarLista(nomeLista) {
   await ensureFirebase();
-  const tbody = document.getElementById('listaCocBody');
-  const theadRow = document.getElementById('theadRow');
-  if (!tbody || !theadRow) return;
+  console.log(`🔍 Tentando carregar lista: ${nomeLista}`);
+  
+  // Pega o ID de destino dinamicamente
+  const tbody = document.querySelector("tbody");
+  const theadRow = document.querySelector("thead tr") || document.getElementById("theadRow");
+  if (!tbody || !theadRow) {
+    console.warn("⚠️ Elementos de tabela não encontrados na página.");
+    return;
+  }
 
-  const ref = db.collection(COL_LISTAS).doc(nomeLista);
-  const snap = await ref.get();
-  if (!snap.exists){ console.warn(`⚠️ Lista ${nomeLista} não encontrada.`); return; }
+  try {
+    const ref = db.collection(COL_LISTAS).doc(nomeLista);
+    const snap = await ref.get();
 
-  const dados = snap.data().nomes || [];
-  if (dados.length === 0){ console.warn(`⚠️ Lista ${nomeLista} vazia.`); return; }
+    if (!snap.exists) {
+      console.warn(`⚠️ Documento '${nomeLista}' não encontrado em '${COL_LISTAS}'.`);
+      tbody.innerHTML = `<tr><td colspan="4">Lista '${nomeLista}' ainda não existe no Firestore.</td></tr>`;
+      return;
+    }
 
-  const colCount = Math.max(3, ...dados.map(x => Array.isArray(x.cols)? x.cols.length: 3));
-  theadRow.innerHTML = '<th>Nome</th>'+Array.from({length:colCount},(_,i)=>`<th>${i+1}</th>`).join('');
-  tbody.innerHTML = '';
+    const dados = Array.isArray(snap.data().nomes) ? snap.data().nomes : [];
+    console.log(`✅ ${nomeLista} carregada com ${dados.length} nomes.`);
 
-  dados.forEach(item=>{
-    const cols = Array.isArray(item.cols)? item.cols : [false,false,false];
-    const tr = document.createElement('tr');
-    const tdNome = document.createElement('td'); tdNome.textContent=item.nome; tdNome.className='nome'; tr.appendChild(tdNome);
-    cols.forEach(v=>{
-      const td = document.createElement('td');
-      const chk = document.createElement('input'); chk.type='checkbox'; chk.checked=!!v;
-      chk.addEventListener('change', ()=>verificarLimpeza(nomeLista));
-      td.appendChild(chk); tr.appendChild(td);
+    if (dados.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="4">Nenhum nome encontrado em '${nomeLista}'.</td></tr>`;
+      return;
+    }
+
+    // Renderiza cabeçalho
+    const colCount = Math.max(3, ...dados.map(x => Array.isArray(x.cols) ? x.cols.length : 3));
+    theadRow.innerHTML = '<th>Nome</th>' + Array.from({ length: colCount }, (_, i) => `<th>${i + 1}</th>`).join('');
+
+    // Renderiza corpo
+    tbody.innerHTML = '';
+    dados.forEach(item => {
+      const tr = document.createElement('tr');
+      const tdNome = document.createElement('td');
+      tdNome.textContent = item.nome;
+      tdNome.className = 'nome';
+      tr.appendChild(tdNome);
+
+      const cols = Array.isArray(item.cols) ? item.cols : [false, false, false];
+      for (let i = 0; i < colCount; i++) {
+        const td = document.createElement('td');
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.checked = !!cols[i];
+        chk.addEventListener('change', () => verificarLimpeza(nomeLista));
+        td.appendChild(chk);
+        tr.appendChild(td);
+      }
+
+      tbody.appendChild(tr);
     });
-    tbody.appendChild(tr);
-  });
-
-  console.log(`✅ ${nomeLista} carregada (${dados.length} itens)`);
+  } catch (e) {
+    console.error(`❌ Erro ao carregar lista '${nomeLista}':`, e);
+    const tbody = document.querySelector("tbody");
+    if (tbody) tbody.innerHTML = `<tr><td colspan="4">Erro ao carregar lista: ${e.message}</td></tr>`;
+  }
 }
 
-async function salvarLista(nomeLista){
-  await ensureFirebase();
-  const tbody = document.getElementById('listaCocBody');
-  const theadRow = document.getElementById('theadRow');
-  if (!tbody || !theadRow) return;
-
-  const colCount = theadRow.cells.length - 1;
-  const linhas = [...tbody.querySelectorAll('tr')];
-  const dados = linhas.map(row=>{
-    const nome = row.cells[0].textContent;
-    const cols = [];
-    for(let i=1;i<=colCount;i++) cols.push(!!row.cells[i].querySelector('input').checked);
-    return { nome, cols, data:new Date().toISOString() };
-  });
-  await db.collection(COL_LISTAS).doc(nomeLista).set({nomes:dados});
-  await registrarLog("ADMIN", `Salvar lista ${nomeLista} (${dados.length})`);
-}
 
 // ================== Limpeza e expansão ==================
 async function verificarLimpeza(nomeLista){
@@ -377,3 +391,4 @@ window.escutarListaConsulta = escutarListaConsulta;
 window.executarBackupAutomatizado = executarBackupAutomatizado;
 
 logConsole("🦇 script.js carregado — DarkEpoch v2025.11", "color:#00ffcc;font-weight:bold;");
+
