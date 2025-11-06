@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dark Epoch — Login</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body class="dp-center">
+  <div class="container auth-card" id="loginCard">
+    <h1 class="title">⚔️ DARK EPOCH ⚔️</h1>
+    <h2 class="subtitle">Acesso Restrito</h2>
+    <input type="password" id="adminPassword" placeholder="Digite sua senha" />
+    <button id="btnLogin" class="btn">Entrar</button>
+    <p id="loginStatus" class="muted"></p>
+  </div>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
+      authDomain: "mu-epoch.firebaseapp.com",
+      projectId: "mu-epoch",
+      storageBucket: "mu-epoch.firebasestorage.app",
+      messagingSenderId: "995547087811",
+      appId: "1:995547087811:web:9a4581071b931f9364f376",
+      measurementId: "G-NM65WWHE91"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    window.db = firebase.firestore();
+    window.auth = firebase.auth();
+  </script>
+  <script src="js/script.js?v=2025-11-05"></script>
+  <script>
+    document.getElementById('btnLogin').addEventListener('click', async () => {
+      try {
+        if (typeof loginAdmin !== 'function') {
+          alert("⚠️ script.js não carregou. Verifique caminho em /js/.");
+          return;
+        }
+        await loginAdmin();
+      } catch (e) {
+        console.error("Erro no login:", e);
+        document.getElementById("loginStatus").textContent = "⚠️ Erro no login: " + (e.message || e);
+      }
+    });
+  </script>
+</body>
+</html>
