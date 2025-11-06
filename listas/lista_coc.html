@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista COC — Dark Epoch</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script defer src="../js/script.js?v=2025-11-05"></script>
+  <script>
+    window.addEventListener("DOMContentLoaded",()=>{
+      if (typeof requireAdminOrRedirect==="function") requireAdminOrRedirect();
+      if (!firebase.apps.length) return alert("Firebase não inicializado.");
+      window.db=firebase.firestore();
+      carregarLista('coc');
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>LISTA COC</h1>
+    <div class="menu-top">
+      <button onclick="salvarLista('coc')">💾 Salvar</button>
+      <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
+      <button onclick="window.location.href='../admin/adicionar.html'">➕ Adicionar</button>
+      <button onclick="window.location.href='../admin/excluir.html'">🗑️ Remover</button>
+    </div>
+    <table>
+      <thead><tr id="theadRow"><th>Nome</th><th>1</th><th>2</th><th>3</th></tr></thead>
+      <tbody id="listaCocBody"></tbody>
+    </table>
+  </div>
+</body>
+</html>
