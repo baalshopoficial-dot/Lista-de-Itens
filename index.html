@@ -4,15 +4,12 @@
   <meta charset="UTF-8" />
   <title>Dark Epoch — Login</title>
   <link rel="stylesheet" href="assets/css/style.css" />
-
-  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
-
 <body class="dp-center">
-  <div class="card auth-card" id="loginCard">
+  <div class="container auth-card" id="loginCard" style="max-width:420px;">
     <h1 class="title">⚔️ DARK EPOCH ⚔️</h1>
     <h2 class="subtitle">Acesso Restrito</h2>
 
@@ -22,7 +19,7 @@
     <p id="loginStatus" class="muted"></p>
   </div>
 
-  <!-- ===== Inicialização Firebase ===== -->
+  <!-- Firebase init -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
@@ -33,35 +30,24 @@
       appId: "1:995547087811:web:9a4581071b931f9364f376",
       measurementId: "G-NM65WWHE91"
     };
-
-    // 🔥 Inicializa o Firebase uma única vez
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-      console.log("✅ Firebase inicializado com sucesso.");
-    } else {
-      console.log("⚙️ Firebase já estava inicializado.");
-    }
-
-    // Inicializa Firestore e Auth globalmente
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     window.db = firebase.firestore();
     window.auth = firebase.auth();
   </script>
 
-  <!-- ===== Script principal ===== -->
+  <!-- principal -->
   <script src="js/script.js?v=2025-11-05"></script>
-
-  <!-- ===== Handler do botão ===== -->
   <script>
     document.getElementById('btnLogin').addEventListener('click', async () => {
       try {
         if (typeof loginAdmin !== 'function') {
-          alert("⚠️ script.js não carregou. Verifique o caminho em /js/.");
+          alert("⚠️ script.js não carregou. Verifique caminho em /js/.");
           return;
         }
         await loginAdmin();
       } catch (e) {
         console.error("Erro no login:", e);
-        document.getElementById("loginStatus").textContent = "⚠️ Erro no login: " + e.message;
+        document.getElementById("loginStatus").textContent = "⚠️ Erro no login: " + (e.message || e);
       }
     });
   </script>
