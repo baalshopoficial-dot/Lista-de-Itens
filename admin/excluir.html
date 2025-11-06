@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Remover Nome — Dark Epoch</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script defer src="../js/script.js?v=2025-11-05"></script>
+</head>
+<body onload="requireAdminOrRedirect()">
+  <div class="container" style="max-width:760px;">
+    <h1>🗑️ Remover Nome</h1>
+    <input id="nomeRemover" type="text" placeholder="Digite o nome para remover">
+    <fieldset style="text-align:left;margin-top:10px">
+      <legend>Listas</legend>
+      <label><input type="checkbox" class="listaChk" value="coc"> COC</label><br>
+      <label><input type="checkbox" class="listaChk" value="alma"> ALMA</label><br>
+      <label><input type="checkbox" class="listaChk" value="bau"> BAU</label><br>
+      <label><input type="checkbox" class="listaChk" value="chama"> CHAMA</label><br>
+      <label><input type="checkbox" class="listaChk" value="pena"> PENA</label><br>
+      <label><input type="checkbox" id="chkAll" onchange="document.querySelectorAll('.listaChk').forEach(c=>c.checked=this.checked)"> Todas</label>
+    </fieldset>
+    <div class="menu-top">
+      <button onclick="removerNome()">🗑️ Remover</button>
+      <button onclick="location.href='../menu.html'">⬅️ Voltar</button>
+    </div>
+    <p id="statusRemover"></p>
+  </div>
+</body>
+</html>

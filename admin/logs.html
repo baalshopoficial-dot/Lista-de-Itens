@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><title>Logs — Dark Epoch</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script defer src="../js/script.js?v=2025-11-05"></script>
+</head>
+<body onload="requireAdminOrRedirect(); carregarLogs();">
+  <div class="container">
+    <h1>📜 Logs do Sistema</h1>
+    <div class="menu-top"><button onclick="location.href='../menu.html'">⬅️ Voltar</button></div>
+    <table id="tabelaLogs"><thead><tr><th>Data</th><th>Usuário</th><th>Ação</th></tr></thead><tbody></tbody></table>
+  </div>
+  <script>
+    async function carregarLogs(){
+      await ensureFirebase();
+      const tbody=document.querySelector('#tabelaLogs tbody');
+      tbody.innerHTML='';
+      const snap=await db.collection('logs_actions').orderBy('data','desc').limit(100).get();
+      snap.forEach(doc=>{
+        const l=doc.data();
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${new Date(l.data).toLocaleString()}</td><td>${l.usuario}</td><td>${l.acao}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+  </script>
+</body>
+</html>
