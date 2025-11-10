@@ -1,24 +1,218 @@
-/* DARK EPOCH THEME v2025.11 */
-:root{--neon:#00ffd5;--bg:#0a0a0a;--bg2:#111}
-*{box-sizing:border-box}
-body{margin:0;padding:40px 10px;background:radial-gradient(circle at center,#000 0%,#050505 60%,#000 100%);color:var(--neon);font-family:"Segoe UI",sans-serif;display:flex;justify-content:center;align-items:flex-start;min-height:100vh}
-.container{width:95%;max-width:900px;background:rgba(10,10,10,.92);border:1px solid var(--neon);border-radius:18px;box-shadow:0 0 22px #00ffd580;padding:30px 40px}
-.title,h1,h2{text-align:center;text-shadow:0 0 10px var(--neon)}
-h1,.title{font-size:1.9em;margin:0 0 8px}
-h2,.subtitle{font-size:1.15em;color:#cfcfcf;margin:0 0 18px}
-input[type="text"],input[type="password"],input[type="email"]{width:100%;background:var(--bg2);border:1px solid var(--neon);border-radius:10px;color:var(--neon);padding:10px 12px;text-align:center;margin:6px 0 10px;outline:none}
-input:focus{box-shadow:0 0 10px var(--neon)}
-button{background:var(--neon);color:#000;border:none;border-radius:10px;padding:10px 0;font-weight:700;cursor:pointer;transition:.25s;width:100%;max-width:220px}
-button:hover{background:#00a58f;color:#fff;box-shadow:0 0 12px var(--neon)}
-.menu-top,.btn-grid,.btn-bottom,.menu-botoes{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0}
-.menu-top button,.btn-grid button,.btn-bottom button,.menu-botoes button{flex:1 1 160px;max-width:220px}
-table{width:100%;border-collapse:collapse;margin-top:15px;font-size:.95em;border:1px solid #00ffd555;border-radius:12px;overflow:hidden}
-th,td{border:1px solid #00ffd530;padding:9px;text-align:center}
-th{background:#00ffd520;color:var(--neon)}
-td.nome{text-align:left;padding-left:12px;font-weight:700;color:#bff}
-.divider{height:1px;background:#00ffd555;margin:16px 0}
-.footer{text-align:center;color:#8a8a8a;margin-top:18px;font-size:.85em}
-.glow-ok{box-shadow:0 0 22px var(--neon)!important;transition:box-shadow .5s ease}
-.dp-center{display:flex;justify-content:center;align-items:center;min-height:100vh}
-.container.auth-card{max-width:420px}
-@media (max-width:600px){.container{padding:22px;width:100%}table{font-size:.86em}button{font-size:.95em}}
+:root {
+  --neon: #00ffd5;
+  --bg: #000000;
+  --bg2: #101010;
+  --text: #e6ffff;
+  --radius: 18px;
+  --shadow: 0 0 22px #00ffd580;
+  --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 24px 10px;
+  background: radial-gradient(circle at center, #000 0%, #050505 60%, #000 100%);
+  color: var(--text);
+  font-family: var(--font);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.dp-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container,
+.card,
+.auth-card {
+  width: 95%;
+  max-width: 900px;
+  background: rgba(5, 5, 5, 0.96);
+  border: 1px solid var(--neon);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  box-shadow: var(--shadow);
+}
+
+.auth-card {
+  max-width: 420px;
+  text-align: center;
+}
+
+h1,
+.title {
+  font-size: 1.9em;
+  margin: 0 0 6px;
+  color: var(--neon);
+  text-align: center;
+  text-shadow: 0 0 10px var(--neon);
+}
+
+h2,
+.subtitle {
+  font-size: 1.1em;
+  margin: 0 0 16px;
+  color: #b5b5b5;
+  text-align: center;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  width: 100%;
+  padding: 10px 12px;
+  margin: 6px 0 10px;
+  border-radius: 10px;
+  border: 1px solid var(--neon);
+  background: var(--bg2);
+  color: var(--neon);
+  font-size: 0.95em;
+  text-align: center;
+  outline: none;
+}
+
+input:focus {
+  box-shadow: 0 0 10px var(--neon);
+}
+
+button,
+.btn {
+  background: var(--neon);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 0;
+  font-weight: 700;
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: 0.25s;
+  width: 100%;
+  max-width: 220px;
+}
+
+button:hover,
+.btn:hover {
+  background: #00a58f;
+  color: #fff;
+  box-shadow: 0 0 12px var(--neon);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--neon);
+  border: 1px solid var(--neon);
+  box-shadow: none;
+}
+
+.btn-outline:hover {
+  background: var(--neon);
+  color: #000;
+  box-shadow: 0 0 12px var(--neon);
+}
+
+.menu-top,
+.btn-grid,
+.btn-bottom,
+.menu-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.menu-top button,
+.btn-grid button,
+.btn-bottom button,
+.menu-botoes button {
+  flex: 1 1 160px;
+  max-width: 220px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 14px;
+  font-size: 0.9em;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th,
+td {
+  border: 1px solid #00ffd530;
+  padding: 6px 5px;
+  text-align: center;
+}
+
+th {
+  background: #00ffd520;
+  color: var(--neon);
+}
+
+td.nome {
+  text-align: left;
+  padding-left: 10px;
+  font-weight: 600;
+  color: #bff;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: #00ffd555;
+  margin: 14px 0;
+}
+
+.footer {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 0.8em;
+  color: #888;
+}
+
+.muted {
+  color: #8ad;
+  font-size: 0.85em;
+}
+
+/* Consulta geral */
+.grid-consulta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.card-consulta {
+  background: #050505;
+  border-radius: 12px;
+  border: 1px solid var(--neon);
+  padding: 8px;
+}
+
+.card-consulta h3 {
+  margin: 0 0 4px;
+  font-size: 0.95em;
+  color: var(--neon);
+}
+
+/* Glow login ok */
+.glow-ok {
+  box-shadow: 0 0 25px var(--neon) !important;
+  transition: box-shadow 0.5s ease;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  body { padding: 16px 6px; }
+  .container, .card, .auth-card { padding: 18px 16px; }
+  table { font-size: 0.8em; }
+}
