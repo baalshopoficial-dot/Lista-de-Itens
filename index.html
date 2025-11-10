@@ -9,15 +9,27 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
 <body class="dp-center">
-  <div class="container auth-card" id="loginCard">
+  <div class="auth-card" id="loginCard">
     <h1 class="title">⚔️ DARK EPOCH ⚔️</h1>
     <h2 class="subtitle">Acesso Restrito</h2>
+
     <input type="password" id="adminPassword" placeholder="Digite sua senha" />
-    <button id="btnLogin" class="btn">Entrar</button>
+
+    <input type="email" id="adminEmail"
+      placeholder="Email para login Firebase"
+      style="display:none;" />
+
+    <div class="menu-botoes">
+      <button id="btnLogin" class="btn">Entrar</button>
+      <button id="btnToggleMode" class="btn btn-outline">Login com e-mail</button>
+    </div>
+
     <p id="loginStatus" class="muted"></p>
   </div>
+
+  <script src="js/script.js"></script>
   <script>
-    const firebaseConfig = {
+    if (!firebase.apps.length) firebase.initializeApp({
       apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
       authDomain: "mu-epoch.firebaseapp.com",
       projectId: "mu-epoch",
@@ -25,25 +37,45 @@
       messagingSenderId: "995547087811",
       appId: "1:995547087811:web:9a4581071b931f9364f376",
       measurementId: "G-NM65WWHE91"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    window.db = firebase.firestore();
-    window.auth = firebase.auth();
-  </script>
-  <script src="js/script.js?v=2025-11-05"></script>
-  <script>
-    document.getElementById('btnLogin').addEventListener('click', async () => {
-      try {
-        if (typeof loginAdmin !== 'function') {
-          alert("⚠️ script.js não carregou. Verifique caminho em /js/.");
-          return;
-        }
-        await loginAdmin();
-      } catch (e) {
-        console.error("Erro no login:", e);
-        document.getElementById("loginStatus").textContent = "⚠️ Erro no login: " + (e.message || e);
-      }
     });
+
+    let modoEmail = false;
+    const emailEl = document.getElementById("adminEmail");
+    const statusEl = document.getElementById("loginStatus");
+    const btnToggle = document.getElementById("btnToggleMode");
+    const btnLogin = document.getElementById("btnLogin");
+
+    function atualizarModo() {
+      if (modoEmail) {
+        emailEl.style.display = "block";
+        btnToggle.textContent = "Login com senha local";
+        statusEl.textContent = "Modo: e-mail + senha (Firebase).";
+      } else {
+        emailEl.style.display = "none";
+        emailEl.value = "";
+        btnToggle.textContent = "Login com e-mail";
+        statusEl.textContent = "Modo: senha local (MASTER / ADMIN / extra).";
+      }
+    }
+
+    btnToggle.addEventListener("click", () => {
+      modoEmail = !modoEmail;
+      atualizarModo();
+    });
+
+    btnLogin.addEventListener("click", () => {
+      if (typeof loginAdmin !== "function") {
+        alert("script.js não carregado. Verifique /js/script.js");
+        return;
+      }
+      loginAdmin();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") btnLogin.click();
+    });
+
+    atualizarModo();
   </script>
 </body>
 </html>
