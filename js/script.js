@@ -1,5 +1,18 @@
 // DarkEpoch v2025.11-FIX4
 
+// --- GARANTE FIREBASE EM TODAS AS PÁGINAS ---
+if (typeof firebase !== "undefined" && !firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
+    authDomain: "mu-epoch.firebaseapp.com",
+    projectId: "mu-epoch",
+    storageBucket: "mu-epoch.firebasestorage.app",
+    messagingSenderId: "995547087811",
+    appId: "1:995547087811:web:9a4581071b931f9364f376",
+    measurementId: "G-NM65WWHE91"
+  });
+}
+
 const ADMIN_HASH = "18b68013caff50520c9706a2b96b2370f8fe3cc5be15db5dca5324bf48d52a77"; // D3v1L2Br
 const ADMIN_MASTER_HASH = "500a3ec61db2d71d839cb84e3ebdc5932a3753fc657011ecf7a58cd4251c836a"; // cp1115bupnf
 
