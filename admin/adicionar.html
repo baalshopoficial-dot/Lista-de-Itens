@@ -6,17 +6,29 @@
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <script defer src="../js/script.js?v=2025-11-05"></script>
+  <script src="../js/script.js"></script>
+  <script>
+    if (!firebase.apps.length) firebase.initializeApp({
+      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
+      authDomain: "mu-epoch.firebaseapp.com",
+      projectId: "mu-epoch",
+      storageBucket: "mu-epoch.firebasestorage.app",
+      messagingSenderId: "995547087811",
+      appId: "1:995547087811:web:9a4581071b931f376",
+      measurementId: "G-NM65WWHE91"
+    });
+    window.addEventListener("DOMContentLoaded", () => requireAdminOrRedirect());
+  </script>
 </head>
-<body onload="requireAdminOrRedirect()">
-  <div class="container" style="max-width:720px;">
-    <h1>➕ Adicionar Nome Global</h1>
-    <input id="novoNome" type="text" placeholder="Digite o nome para adicionar">
-    <div class="menu-top">
-      <button onclick="adicionarNome()">✅ Adicionar</button>
-      <button onclick="location.href='../menu.html'">⬅️ Voltar</button>
+<body class="dp-center">
+  <div class="auth-card">
+    <h1>Adicionar Nome</h1>
+    <input type="text" id="novoNome" placeholder="Nome do jogador">
+    <div class="menu-botoes">
+      <button onclick="adicionarNome()">Salvar</button>
+      <button class="btn-outline" onclick="location.href='../menu.html'">Voltar</button>
     </div>
-    <p id="status"></p>
+    <p id="status" class="muted"></p>
   </div>
 </body>
 </html>
