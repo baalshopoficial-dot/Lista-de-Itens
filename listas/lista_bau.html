@@ -6,13 +6,20 @@
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <script defer src="../js/script.js?v=2025-11-05"></script>
+  <script src="../js/script.js"></script>
   <script>
-    window.addEventListener("DOMContentLoaded",()=>{
-      if (typeof requireAdminOrRedirect==="function") requireAdminOrRedirect();
-      if (!firebase.apps.length) return alert("Firebase não inicializado.");
-      window.db=firebase.firestore();
-      carregarLista('bau');
+    if (!firebase.apps.length) firebase.initializeApp({
+      apiKey: "AIzaSyB5IT8QbzljkYD3DW1VxaHNRhokANIpKj4",
+      authDomain: "mu-epoch.firebaseapp.com",
+      projectId: "mu-epoch",
+      storageBucket: "mu-epoch.firebasestorage.app",
+      messagingSenderId: "995547087811",
+      appId: "1:995547087811:web:9a4581071b931f9364f376",
+      measurementId: "G-NM65WWHE91"
+    });
+    window.addEventListener("DOMContentLoaded", async () => {
+      requireAdminOrRedirect();
+      await carregarLista("bau");
     });
   </script>
 </head>
@@ -21,9 +28,8 @@
     <h1>LISTA BAU</h1>
     <div class="menu-top">
       <button onclick="salvarLista('bau')">💾 Salvar</button>
-      <button onclick="window.location.href='../menu.html'">⬅️ Voltar</button>
-      <button onclick="window.location.href='../admin/adicionar.html'">➕ Adicionar</button>
-      <button onclick="window.location.href='../admin/excluir.html'">🗑️ Remover</button>
+      <button onclick="carregarLista('bau')">🔄 Atualizar</button>
+      <button onclick="location.href='../menu.html'">⬅️ Voltar</button>
     </div>
     <table>
       <thead><tr id="theadRow"><th>Nome</th><th>1</th><th>2</th><th>3</th></tr></thead>
