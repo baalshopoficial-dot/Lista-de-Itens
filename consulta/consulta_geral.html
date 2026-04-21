@@ -11,6 +11,24 @@
 .grid-consulta{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
 .card-consulta{border:1px solid #00ffd5;border-radius:14px;padding:12px;background:#0f0f0f}
 .card-consulta h3{margin:0 0 8px;text-align:center}
+
+.btn-regras {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 10px 24px;
+  background: transparent;
+  color: #00ffd5;
+  border: 1px solid #00ffd5;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-regras:hover {
+  background: #00ffd5;
+  color: #0f0f0f;
+}
 </style>
 <script>
 window.addEventListener('DOMContentLoaded', ()=>{
@@ -27,6 +45,9 @@ window.addEventListener('DOMContentLoaded', ()=>{
 <body>
   <div class="container">
     <h1>Consulta Geral</h1>
+
+    <a href="regras.html" class="btn-regras">📋 Regras</a>
+
     <div class="grid-consulta">
       <div class="card-consulta"><h3>COC</h3><table><thead id="th_coc"></thead><tbody id="tb_coc"></tbody></table></div>
       <div class="card-consulta"><h3>ALMA</h3><table><thead id="th_alma"></thead><tbody id="tb_alma"></tbody></table></div>
