@@ -1,1 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Regras — Dark Epoch</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap');
 
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #050505;
+    color: #c9c9c9;
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Fundo animado */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(0,255,213,0.04) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(180,0,255,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+  }
+
+  /* Cabeçalho */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .btn-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: transparent;
+    color: #00ffd5;
+    border: 1px solid #00ffd5;
+    border-radius: 6px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .btn-voltar:hover { background: #00ffd5; color: #050505; }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 900;
+    color: #00ffd5;
+    letter-spacing: 3px;
+    text-shadow: 0 0 30px rgba(0,255,213,0.3);
+  }
+
+  /* Divider */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #00ffd5, transparent);
+    margin: 0 0 36px;
+    opacity: 0.4;
+  }
+
+  /* Intro geral */
+  .intro-box {
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-left: 3px solid #00ffd5;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #aaa;
+  }
+  .intro-box strong { color: #00ffd5; }
+
+  /* Cards de regra */
+  .regra-card {
+    background: #0a0a0a;
+    border: 1px solid #1c1c1c;
+    border-radius: 12px;
+    padding: 24px 26px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: border-color 0.25s;
+  }
+  .regra-card:hover { border-color: #00ffd566; }
+
+  .regra-numero {
+    position: absolute;
+    top: -14px;
+    left: 22px;
+    background: #050505;
+    padding: 0 10px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: #00ffd5;
+    letter-spacing: 2px;
+    border: 1px solid #00ffd5;
+    border-radius: 4px;
+  }
+
+  .regra-card p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #bbb;
+    margin-bottom: 14px;
+  }
+  .regra-card p:last-child { margin-bottom: 0; }
+
+  /* Badge de destaque */
+  .badge {
+    display: inline-block;
+    background: rgba(0,255,213,0.08);
+    border: 1px solid #00ffd533;
+    color: #00ffd5;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-right: 4px;
+  }
+
+  /* Lista de itens COC etc */
+  .lista-itens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .item-tag {
+    background: #111;
+    border: 1px solid #00ffd544;
+    color: #00ffd5;
+    border-radius: 6px;
+    padding: 5px 14px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    font-family: 'Cinzel', serif;
+  }
+
+  /* Destaque especial regra 3 */
+  .regra-card.destaque {
+    border-color: #ffd70033;
+    background: linear-gradient(135deg, #0a0a0a 80%, #1a1200);
+  }
+  .regra-card.destaque:hover { border-color: #ffd70066; }
+  .regra-card.destaque .regra-numero { color: #ffd700; border-color: #ffd700; }
+  .regra-card.destaque .badge { color: #ffd700; border-color: #ffd70033; background: rgba(255,215,0,0.07); }
+  .regra-card.destaque .contribuicao {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffd700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.4);
+  }
+
+  /* Data de vigência */
+  .vigencia {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: #666;
+  }
+  .vigencia span { color: #ffd700; font-weight: 600; }
+
+  /* Rodapé */
+  .footer-note {
+    margin-top: 44px;
+    text-align: center;
+    font-size: 0.82rem;
+    color: #333;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <a href="consulta_geral.html" class="btn-voltar">← Voltar</a>
+      <h1>⚔ Regras</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Intro geral MU -->
+    <div class="intro-box">
+      Bem-vindo ao servidor <strong>Dark Epoch</strong> — baseado no clássico <strong>MU Online</strong>.
+      Para garantir uma experiência justa e equilibrada para todos os jogadores, é fundamental que as regras abaixo sejam
+      lidas, compreendidas e respeitadas. O descumprimento pode resultar em advertências, perda de direitos sobre itens
+      ou punições conforme a gravidade. A administração se reserva o direito de alterar as regras mediante aviso prévio.
+      <br><br>
+      Itens de alto valor obtidos em eventos, cercos e drops especiais são controlados por listas internas para garantir
+      distribuição justa entre os membros ativos da guilda. A participação nos eventos e o cumprimento das metas semanais
+      são critérios essenciais para elegibilidade.
+    </div>
+
+    <!-- Regra 1 -->
+    <div class="regra-card">
+      <span class="regra-numero">REGRA 01</span>
+      <p>
+        Itens que possuem listas devem ter as mesmas respeitadas. Os itens listados abaixo seguem ordem de prioridade
+        conforme a lista registrada — nenhum membro pode reivindicar um item fora da sua posição sem autorização da liderança.
+      </p>
+      <div class="lista-itens">
+        <span class="item-tag">COC</span>
+        <span class="item-tag">CHAMA</span>
+        <span class="item-tag">PENA</span>
+        <span class="item-tag">BAU DO CERCO</span>
+        <span class="item-tag">ALMA</span>
+      </div>
+    </div>
+
+    <!-- Regra 2 -->
+    <div class="regra-card">
+      <span class="regra-numero">REGRA 02</span>
+      <p>
+        Caso os itens <strong style="color:#00ffd5">não sejam distribuídos faltando 5 minutos</strong> para o encerramento,
+        qualquer membro que estiver online poderá dar um lance no mesmo.
+      </p>
+      <p>
+        O item será <span class="badge">REGISTRADO NA LISTA</span> posteriormente, mantendo o controle de distribuição
+        para as próximas rodadas.
+      </p>
+    </div>
+
+    <!-- Regra 3 -->
+    <div class="regra-card destaque">
+      <span class="regra-numero">REGRA 03</span>
+      <p>
+        Itens do <strong style="color:#ffd700">Cerco</strong> passam a ser distribuídos exclusivamente para jogadores
+        que estejam <span class="badge">ATIVAMENTE JOGANDO</span> e que comprovem engajamento real no servidor.
+      </p>
+      <p>
+        A partir de <span class="contribuicao">21/04/2026</span>, apenas membros que completarem
+        <span class="contribuicao">12.000 de Contribuição Semanal</span> terão direito a receber itens do Cerco.
+        Jogadores abaixo dessa meta ficam automaticamente <strong style="color:#ff4444">inelegíveis</strong> naquela semana.
+      </p>
+      <div class="vigencia">Vigência: a partir de <span>21 de Abril de 2026</span></div>
+    </div>
+
+    <div class="footer-note">DARK EPOCH · As regras se aplicam a todos os membros sem exceção.</div>
+
+  </div>
+</body>
+</html>
